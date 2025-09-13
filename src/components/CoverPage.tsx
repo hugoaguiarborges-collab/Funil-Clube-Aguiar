@@ -1,4 +1,4 @@
-import React from "react";
+
 
 type Props = {
   onStart: () => void;
@@ -10,14 +10,14 @@ export default function CoverPage({ onStart }: Props) {
       <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden max-w-md w-full">
         {/* Imagem de fundo */}
         <img
-          src="/capa-desafio.jpg"
+          src="/capa-desafio.png"
           alt="Desafio para mulheres 40+"
           className="w-full h-[340px] object-cover"
           draggable={false}
         />
         {/* Logo sobre a imagem */}
         <div className="absolute top-7 left-7 flex flex-col items-start z-10">
-          <img src="/logo-aguiar.svg" alt="Aguiar Clube" className="h-12 mb-2" />
+          <img src="/logo-aguiar.png" alt="Aguiar Clube" className="h-12 mb-2" />
         </div>
         {/* Box com texto e botão */}
         <div className="absolute bottom-0 left-0 w-full bg-[#f5ede4] px-6 py-8 rounded-t-3xl flex flex-col items-center shadow-lg z-10">
