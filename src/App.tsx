@@ -1,9 +1,158 @@
 import React, { useState, useEffect } from "react";
 import { useFunnelSteps } from "./components/useFunnelSteps";
 import { AnimatePresence, motion } from "framer-motion";
-// ... (Demais imports e componentes auxiliares permanecem iguais)
+import CoverPage from "./components/CoverPage";
+
+// Confetti effect (simple, for fun)
+function ConfettiBurst({ show }: { show: boolean }) {
+  if (!show) return null;
+  const confetti = Array.from({ length: 9 });
+  return (
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center z-40">
+      {confetti.map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+          animate={{
+            opacity: 0,
+            scale: [1, 1.4, 0.7],
+            x: 60 * Math.cos((i / confetti.length) * 2 * Math.PI),
+            y: 60 * Math.sin((i / confetti.length) * 2 * Math.PI),
+          }}
+          transition={{ duration: 0.9, ease: "easeInOut" }}
+          className="w-4 h-4 rounded-full absolute"
+          style={{
+            background:
+              i % 3 === 0 ? "#fbbf24" : i % 3 === 1 ? "#34d399" : "#f472b6",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+// Barra de progresso animada (pulsando ao avançar)
+function ProgressBar({
+  value,
+  max,
+  pulse,
+}: {
+  value: number;
+  max: number;
+  pulse: boolean;
+}) {
+  const percent = Math.round((value / max) * 100);
+  return (
+    <motion.div
+      className="w-full h-3 bg-blue-700 rounded mb-6 overflow-hidden"
+      animate={pulse ? { scale: [1, 1.05, 1] } : { scale: 1 }}
+      transition={
+        pulse ? { duration: 0.5, ease: "easeInOut" } : { duration: 0 }
+      }
+    >
+      <motion.div
+        className="h-full bg-yellow-400"
+        initial={false}
+        animate={{ width: `${percent}%` }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      />
+    </motion.div>
+  );
+}
+
+// Botão animado para opções do funil, sem filter!
+function AnimatedOptionButton({
+  children,
+  onClick,
+  selected,
+  disabled,
+  showCheck,
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+  selected?: boolean;
+  disabled?: boolean;
+  showCheck?: boolean;
+}) {
+  return (
+    <motion.button
+      whileTap={{ scale: 0.93, rotate: -3 }}
+      whileHover={{
+        boxShadow: "0 0 0 4px #fef3c7, 0 8px 32px 0px rgba(251,191,36,0.18)",
+      }}
+      animate={{
+        scale: selected ? 1.11 : 1,
+        background: selected
+          ? "linear-gradient(90deg,#fde68a 70%,#fbbf24 100%)"
+          : "linear-gradient(90deg,#fbbf24 85%,#fde68a 100%)",
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 420,
+        damping: 20,
+      }}
+      className={`relative rounded-xl px-5 py-3 font-bold text-lg cursor-pointer focus:outline-none border-2 border-yellow-400 transition-all
+        ${selected ? "ring-4 ring-yellow-200" : ""}
+        ${disabled ? "opacity-60 cursor-not-allowed" : ""}
+      `}
+      style={{
+        marginBottom: 12,
+        color: "#1e3a8a",
+        overflow: "hidden",
+      }}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      <span>{children}</span>
+      {/* Check animado */}
+      <AnimatePresence>
+        {showCheck && (
+          <motion.span
+            initial={{ scale: 0, opacity: 0, y: -12 }}
+            animate={{ scale: 1.1, opacity: 1, y: 0 }}
+            exit={{ scale: 0, opacity: 0, y: -12 }}
+            transition={{ type: "spring", stiffness: 600, damping: 25 }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600 text-2xl"
+          >
+            ✓
+          </motion.span>
+        )}
+      </AnimatePresence>
+      {/* Brilho animado */}
+      <motion.div
+        className="absolute left-0 top-0 w-full h-full pointer-events-none"
+        initial={false}
+        animate={
+          selected
+            ? { opacity: [0.2, 0.7, 0.09], x: [0, 12, 0] }
+            : { opacity: 0 }
+        }
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+        style={{
+          background: "linear-gradient(90deg,#fff7ed 0%,#fde68a 100%)",
+          filter: "blur(10px)",
+          zIndex: 0,
+        }}
+      />
+    </motion.button>
+  );
+}
+
+// Redireciona para checkout
+function RedirectToCheckout({ url }: { url: string }) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      window.location.href = url;
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [url]);
+  return null;
+}
 
 function App() {
+  // Capa antes do funil
+  const [showCover, setShowCover] = useState(true);
+
   const steps = useFunnelSteps();
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<{ [key: number]: string }>({});
@@ -12,16 +161,18 @@ function App() {
   const [progressPulse, setProgressPulse] = useState(false);
   const [answeredAt, setAnsweredAt] = useState<number | null>(null);
 
-  // Adicione este estado para controlar a seleção temporária na etapa atual
+  // Controle da seleção local e do botão desabilitado
   const [currentSelection, setCurrentSelection] = useState<string | null>(null);
-  // E este para controlar o botão desabilitado
   const [optionDisabled, setOptionDisabled] = useState(false);
 
   useEffect(() => {
-    // Sempre que muda de etapa, reseta seleção e habilitação
     setCurrentSelection(answers[steps[stepIndex]?.id] || null);
     setOptionDisabled(!!answers[steps[stepIndex]?.id]);
   }, [stepIndex, steps, answers]);
+
+  if (showCover) {
+    return <CoverPage onStart={() => setShowCover(false)} />;
+  }
 
   if (steps.length === 0) {
     return <div className="text-center p-8">Carregando...</div>;
@@ -60,17 +211,63 @@ function App() {
     setDirection(-1);
     if (stepIndex > 0) {
       setStepIndex((i) => i - 1);
-      // Limpa a resposta da etapa atual ao voltar, se quiser
-      // setAnswers((prev) => {
-      //   const newPrev = { ...prev };
-      //   delete newPrev[step.id];
-      //   return newPrev;
-      // });
-      // Ou apenas deixa o usuário trocar de resposta normalmente
     }
   }
 
-  // ... (ResumoRespostas, EtapaSalvaBadge, e demais funções permanecem iguais)
+  function ResumoRespostas() {
+    return (
+      <div className="bg-blue-700 rounded-lg p-4 mt-6 text-sm">
+        <div className="font-bold mb-2">Suas respostas:</div>
+        <ul>
+          {steps
+            .filter((s) => s.type === "choice")
+            .map((s) => (
+              <li key={s.id}>
+                <span className="text-blue-200">{s.question}</span>
+                <br />
+                <span className="text-yellow-300 font-bold">
+                  {answers[s.id] || "Não respondido"}
+                </span>
+              </li>
+            ))}
+        </ul>
+      </div>
+    );
+  }
+
+  // Animações de transição de página
+  const pageVariants = {
+    initial: (dir: number) => ({
+      opacity: 0,
+      x: dir > 0 ? 80 : -80,
+      scale: 0.98,
+      filter: "blur(3px)",
+    }),
+    animate: { opacity: 1, x: 0, scale: 1, filter: "blur(0px)" },
+    exit: (dir: number) => ({
+      opacity: 0,
+      x: dir > 0 ? -80 : 80,
+      scale: 0.98,
+      filter: "blur(3px)",
+    }),
+  };
+
+  // Badge animada de "Salvo!" ao responder etapa
+  function EtapaSalvaBadge() {
+    if (!answeredAt) return null;
+    return (
+      <motion.div
+        key={answeredAt}
+        initial={{ opacity: 0, y: -16, scale: 0.5 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -16, scale: 0.5 }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+        className="absolute left-1/2 -translate-x-1/2 -top-8 bg-green-400 text-blue-900 font-bold rounded-full px-4 py-2 shadow-lg border border-green-700 z-50"
+      >
+        Etapa Salva!
+      </motion.div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-900 to-blue-800 text-white px-2">
@@ -130,7 +327,6 @@ function App() {
               </>
             )}
 
-            {/* Mantenha o resto igual */}
             {step.type === "video" && (
               <>
                 <h1 className="text-xl font-bold mb-4">{step.description}</h1>
