@@ -289,7 +289,7 @@ function App() {
                       onClick={() => handleChoice(option)}
                       selected={answers[step.id] === option}
                       showCheck={answers[step.id] === option}
-                      disabled={!!answers[step.id]}
+                      disabled={false}
                     >
                       {option}
                     </AnimatedOptionButton>
