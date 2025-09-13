@@ -14,7 +14,7 @@ export function useFunnelSteps() {
   const [steps, setSteps] = useState<FunnelStep[]>([]);
 
   useEffect(() => {
-    fetch("/src/data/funnelSteps.json")
+    fetch("/data/funnelSteps.json")
       .then((res) => res.json())
       .then((data) => setSteps(data));
   }, []);
