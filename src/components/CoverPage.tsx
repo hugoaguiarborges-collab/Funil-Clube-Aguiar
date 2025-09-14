@@ -1,5 +1,3 @@
-function CoverPage({ onStart }: { onStart: () => void }) {
-
 type Props = {
   onStart: () => void;
 };
