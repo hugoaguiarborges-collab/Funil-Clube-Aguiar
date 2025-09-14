@@ -7,7 +7,8 @@ export default function CoverPage({ onStart }: Props) {
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#f5ede4] px-4 py-8">
       <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden max-w-md w-full">
         {/* Imagem de fundo */}
-        <img src="/capa-desafio.jpg.png" ... />
+        <img
+          src="/capa-desafio.jpg.png"
           alt="Desafio para mulheres 40+"
           className="w-full h-[340px] object-cover"
           draggable={false}
