@@ -1,18 +1,12 @@
+import React from "react";
+
 type Props = {
   onStart: () => void;
 };
 
 export default function CoverPage({ onStart }: Props) {
   return (
-    <div
-      className="min-h-screen flex flex-col items-center justify-center px-4 py-8"
-      style={{
-        backgroundImage: 'url("/capa-desafio.jpg.png")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-cover bg-center bg-no-repeat custom-bg">
       <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden max-w-md w-full">
         {/* Logo sobre a imagem */}
         <div className="absolute top-7 left-7 flex flex-col items-start z-10">
@@ -36,9 +30,20 @@ export default function CoverPage({ onStart }: Props) {
             PARTICIPAR DO DESAFIO
           </button>
         </div>
-        {/* Espaço para manter altura fixa quando sem imagem */}
+        {/* Espaço para manter altura fixa */}
         <div className="h-[340px]"></div>
       </div>
+      {/* CSS para trocar as imagens de fundo */}
+      <style jsx>{`
+        .custom-bg {
+          background-image: url('/capa-desafio-desktop.jpg');
+        }
+        @media (max-width: 768px) {
+          .custom-bg {
+            background-image: url('/capa-desafio-mobile.jpg');
+          }
+        }
+      `}</style>
     </div>
   );
 }
