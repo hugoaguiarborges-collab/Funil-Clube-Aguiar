@@ -36,11 +36,11 @@ export default function CoverPage({ onStart }: Props) {
       {/* CSS para trocar as imagens de fundo */}
       <style jsx>{`
         .custom-bg {
-          background-image: url('/capa-desafio-desktop.jpg');
+          background-image: url('/capa-desafio-desktop.png');
         }
         @media (max-width: 768px) {
           .custom-bg {
-            background-image: url('/capa-desafio-mobile.jpg');
+            background-image: url('/capa-desafio-mobile.jpeg');
           }
         }
       `}</style>
