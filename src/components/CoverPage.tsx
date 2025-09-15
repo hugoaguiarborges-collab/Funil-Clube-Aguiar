@@ -6,7 +6,7 @@ type Props = {
 
 export default function CoverPage({ onStart }: Props) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-cover bg-center bg-no-repeat custom-bg">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 custom-bg">
       <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden max-w-md w-full">
         <div className="absolute top-7 left-7 flex flex-col items-start z-10">
           <img src="/logo-aguiar.svg" alt="Aguiar Clube" className="h-12 mb-2" />
@@ -29,16 +29,6 @@ export default function CoverPage({ onStart }: Props) {
         </div>
         <div className="h-[340px]"></div>
       </div>
-      <style jsx>{`
-        .custom-bg {
-          background-image: url('/capa-desafio-desktop.png');
-        }
-        @media (max-width: 768px) {
-          .custom-bg {
-            background-image: url('/capa-desafio-mobile.jpeg');
-          }
-        }
-      `}</style>
     </div>
   );
 }
