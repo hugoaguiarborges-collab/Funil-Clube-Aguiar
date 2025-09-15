@@ -33,7 +33,6 @@ export default function CoverPage({ onStart }: Props) {
         {/* Espaço para manter altura fixa */}
         <div className="h-[340px]"></div>
       </div>
-      {/* CSS para trocar as imagens de fundo */}
       <style jsx>{`
         .custom-bg {
           background-image: url('/capa-desafio-desktop.png');
