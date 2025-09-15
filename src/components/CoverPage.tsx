@@ -8,14 +8,11 @@ export default function CoverPage({ onStart }: Props) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 bg-cover bg-center bg-no-repeat custom-bg">
       <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden max-w-md w-full">
-        {/* Logo sobre a imagem */}
         <div className="absolute top-7 left-7 flex flex-col items-start z-10">
           <img src="/logo-aguiar.svg" alt="Aguiar Clube" className="h-12 mb-2" />
         </div>
-        {/* Box com texto e botão */}
         <div className="absolute bottom-0 left-0 w-full bg-[#f5ede4] px-6 py-8 rounded-t-3xl flex flex-col items-center shadow-lg z-10">
           <div className="flex items-center mb-4">
-            {/* Ícone Yoga */}
             <svg width={46} height={62} viewBox="0 0 46 62" fill="none">
               <path d="M23 10C28.5228 10 33 5.52285 33 0C33 5.52285 28.5228 10 23 10ZM23 10C17.4772 10 13 5.52285 13 0C13 5.52285 17.4772 10 23 10ZM23 13C28.5228 13 33 17.4772 33 23C33 28.5228 28.5228 33 23 33C17.4772 33 13 28.5228 13 23C13 17.4772 17.4772 13 23 13ZM23 37C30.1797 37 36 42.8203 36 50H10C10 42.8203 15.8203 37 23 37Z" fill="#21517B"/>
             </svg>
@@ -30,7 +27,6 @@ export default function CoverPage({ onStart }: Props) {
             PARTICIPAR DO DESAFIO
           </button>
         </div>
-        {/* Espaço para manter altura fixa */}
         <div className="h-[340px]"></div>
       </div>
       <style jsx>{`
