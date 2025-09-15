@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-bg {
+  background-image: url('/capa-desafio-desktop.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 768px) {
+  .custom-bg {
+    background-image: url('/capa-desafio-mobile.jpeg');
+  }
+}
