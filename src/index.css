@@ -4,13 +4,18 @@
 
 .custom-bg {
   background-image: url('/capa-desafio-desktop.png');
-  background-size: cover;
-  background-position: center;
+  background-size: contain;           /* mostra a imagem inteira, pode deixar barras pretas nas laterais/topo */
+  background-position: center center; /* centraliza a imagem */
   background-repeat: no-repeat;
+  background-color: #181818;          /* cor de fundo caso sobre espaço */
 }
 
 @media (max-width: 768px) {
   .custom-bg {
     background-image: url('/capa-desafio-mobile.jpeg');
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #181818;
   }
 }
