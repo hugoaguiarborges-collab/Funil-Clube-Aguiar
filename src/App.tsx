@@ -171,7 +171,8 @@ function App() {
   }, [stepIndex, steps, answers]);
 
   if (showCover) {
-    return <CoverPage onStart={() => setShowCover(false)} />;
+    // Removido o onStart
+    return <CoverPage />;
   }
 
   if (steps.length === 0) {
@@ -364,7 +365,7 @@ function App() {
                   Redirecionando...
                 </h1>
                 <p className="mb-4">
-                  Aguarde um instante, você será encaminhada para o checkout.
+                  Aguarde um instante, você será encaminhada para o página de inscrição.
                 </p>
                 <RedirectToCheckout url="https://hub.la/r/desafio40mais_play" />
                 <ResumoRespostas />
