@@ -5,11 +5,11 @@ export default function App() {
   const [answered, setAnswered] = useState(false);
   const [answer, setAnswer] = useState("");
 
-  // TELA DE CAPA ATUALIZADA
+  // TELA DE CAPA ATUALIZADA COM GLASSMORPHISM
   if (!started) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-2 custom-bg">
-        <div className="bg-blue-800 p-8 rounded-3xl shadow-2xl shadow-blue-900/50 w-full max-w-md border-4 border-blue-600
+        <div className="backdrop-blur-lg bg-blue-800/75 p-8 rounded-3xl shadow-2xl shadow-blue-900/50 w-full max-w-md border-4 border-blue-600
           transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_12px_32px_8px_rgba(0,0,60,0.35)] 
           ring-2 ring-yellow-300/40 drop-shadow-lg"
         >
@@ -34,7 +34,7 @@ export default function App() {
   if (answered) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-2 custom-bg">
-        <div className="bg-green-700 p-8 rounded-3xl shadow-2xl shadow-green-900/50 w-full max-w-md border-4 border-green-900 text-center
+        <div className="backdrop-blur-lg bg-green-700/80 p-8 rounded-3xl shadow-2xl shadow-green-900/50 w-full max-w-md border-4 border-green-900 text-center
           transform transition-transform duration-300"
         >
           <h1 className="text-2xl font-bold text-white mb-4">Obrigado!</h1>
@@ -47,7 +47,7 @@ export default function App() {
   // Pergunta principal
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-2 custom-bg">
-      <div className="bg-blue-800 p-8 rounded-3xl shadow-2xl shadow-blue-900/50 w-full max-w-md border-4 border-blue-600
+      <div className="backdrop-blur-lg bg-blue-800/75 p-8 rounded-3xl shadow-2xl shadow-blue-900/50 w-full max-w-md border-4 border-blue-600
         transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_12px_32px_8px_rgba(0,0,60,0.35)] 
         ring-2 ring-yellow-300/40 drop-shadow-lg"
       >
