@@ -5,18 +5,22 @@ export default function App() {
   const [answered, setAnswered] = useState(false);
   const [answer, setAnswer] = useState("");
 
-  // Tela de capa
+  // TELA DE CAPA ATUALIZADA
   if (!started) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-2 custom-bg">
         <div className="bg-blue-800 p-8 rounded-2xl shadow-xl w-full max-w-md border border-blue-700 text-center">
-          <h1 className="text-3xl font-bold text-white mb-4">Bem-vindo ao Clube Aguiar!</h1>
-          <p className="text-white mb-8">Clique em começar para iniciar seu diagnóstico personalizado.</p>
+          <h1 className="text-3xl font-bold text-white mb-4">
+            Bem-vinda ao Desafio 40+ Play!
+          </h1>
+          <p className="text-white mb-8">
+            Faça parte do desafio mais divertido e motivador para mulheres com mais de 40 anos
+          </p>
           <button
             className="bg-yellow-400 text-blue-900 font-bold px-6 py-3 rounded-lg text-xl hover:bg-yellow-300 transition"
             onClick={() => setStarted(true)}
           >
-            Começar
+            Quero participar
           </button>
         </div>
       </div>
