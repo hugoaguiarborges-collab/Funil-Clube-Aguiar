@@ -5,13 +5,14 @@ export default function App() {
   const [answered, setAnswered] = useState(false);
   const [answer, setAnswer] = useState("");
 
-  // TELA DE CAPA ATUALIZADA COM GLASSMORPHISM E CARD MENOR
+  // CARD: estrutura principal sem centralização vertical forçada
   if (!started) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-2 custom-bg">
+      <div className="custom-bg px-2">
         <div className="backdrop-blur-lg bg-blue-800/75 p-5 rounded-3xl shadow-2xl shadow-blue-900/50 w-full max-w-sm border-4 border-blue-600
           transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_12px_32px_8px_rgba(0,0,60,0.35)] 
-          ring-2 ring-yellow-300/40 drop-shadow-lg"
+          ring-2 ring-yellow-300/40 drop-shadow-lg
+          md:mb-0 mb-3"
         >
           <h1 className="text-2xl font-extrabold text-white mb-3 drop-shadow-lg">
             Bem-vinda ao Desafio 40+ Play!
@@ -33,9 +34,10 @@ export default function App() {
   // Tela de resposta (depois do clique)
   if (answered) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-2 custom-bg">
+      <div className="custom-bg px-2">
         <div className="backdrop-blur-lg bg-green-700/80 p-5 rounded-3xl shadow-2xl shadow-green-900/50 w-full max-w-sm border-4 border-green-900 text-center
-          transform transition-transform duration-300"
+          transform transition-transform duration-300
+          md:mb-0 mb-3"
         >
           <h1 className="text-xl font-bold text-white mb-3">Obrigado!</h1>
           <p className="text-white">Você escolheu: <span className="font-bold">{answer}</span></p>
@@ -46,10 +48,11 @@ export default function App() {
 
   // Pergunta principal
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-2 custom-bg">
+    <div className="custom-bg px-2">
       <div className="backdrop-blur-lg bg-blue-800/75 p-5 rounded-3xl shadow-2xl shadow-blue-900/50 w-full max-w-sm border-4 border-blue-600
         transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_12px_32px_8px_rgba(0,0,60,0.35)] 
-        ring-2 ring-yellow-300/40 drop-shadow-lg"
+        ring-2 ring-yellow-300/40 drop-shadow-lg
+        md:mb-0 mb-3"
       >
         <h1 className="text-xl font-extrabold text-white mb-4 text-center drop-shadow-lg">
           Qual seu maior objetivo hoje?
