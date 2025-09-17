@@ -5,12 +5,27 @@
 .custom-bg {
   background-image: url('/capa-desafio-desktop.png');
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
+  background-color: #181818;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* MOBILE: imagem cobre tudo, card fica no rodapé sem sobrepor o topo */
 @media (max-width: 768px) {
   .custom-bg {
     background-image: url('/capa-desafio-mobile.jpeg');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-color: #181818;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-end;    /* card vai para parte de baixo */
+    justify-content: center;
+    padding-bottom: 16px;     /* espaço inferior para card não grudar na borda */
   }
 }
