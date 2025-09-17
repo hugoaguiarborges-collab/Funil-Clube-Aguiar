@@ -26,6 +26,6 @@
     display: flex;
     align-items: flex-end;    /* card vai para parte de baixo */
     justify-content: center;
-    padding-bottom: 45px;     /* espaço inferior para card não grudar na borda */
+    padding-bottom: 70px;     /* espaço inferior para card não grudar na borda */
   }
 }
