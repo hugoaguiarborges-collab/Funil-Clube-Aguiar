@@ -6,79 +6,131 @@ type Props = {
   onContinue?: () => void;
 };
 
+function easeOutQuad(t: number) {
+  // t de 0 a 1
+  return t * (2 - t);
+}
+
 export default function EnqueteDepoimento({ onContinue }: Props) {
   const [playing, setPlaying] = useState(false);
-  const [fakeProgress, setFakeProgress] = useState(0); // 0 a 1
   const [videoReady, setVideoReady] = useState(false);
-  const [iframeVisible, setIframeVisible] = useState(false);
+  const [progress, setProgress] = useState(0); // 0 a 1
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [elapsed, setElapsed] = useState(0); // segundos já assistidos
   const intervalRef = useRef<number | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
-  // Barra de progresso: curva acelerada no início, lenta no fim, em 67s
+  // Garante que o overlay cubra SEMPRE o botão do YouTube
+  const overlayStyle: React.CSSProperties = {
+    position: "absolute",
+    inset: 0,
+    background: "rgba(0,0,0,0.67)",
+    zIndex: 3,
+    display: playing ? "none" : "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "opacity 0.2s"
+  };
+
+  // Função para atualizar o progresso com ease-out
+  function recalcProgress(elapsedTime: number) {
+    // Normaliza t
+    const t = Math.min(elapsedTime / VIDEO_DURATION, 1);
+    return easeOutQuad(t);
+  }
+
+  // Inicia o intervalo de atualização do progresso
   useEffect(() => {
-    if (!playing || fakeProgress >= 1) return;
-    intervalRef.current && clearInterval(intervalRef.current);
+    if (!playing) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      return;
+    }
 
+    setStartTime(Date.now() - elapsed * 1000);
     intervalRef.current = window.setInterval(() => {
-      setFakeProgress((prev) => {
-        if (prev >= 1) return 1;
-        // Simulando easeOut: rápido no início, lento no fim
-        // Tempo total = 67s, intervalo = 100ms, então 670 "ticks"
-        // Usando easeOutQuad: progress = t*(2-t)
-        const t = prev;
-        const speed = 0.017 * (2 - t); // diminui com o tempo
-        return Math.min(prev + speed / (VIDEO_DURATION * 10), 1);
+      setElapsed(() => {
+        const newElapsed = Math.min(
+          ((Date.now() - (startTime ?? Date.now())) / 1000),
+          VIDEO_DURATION
+        );
+        setProgress(recalcProgress(newElapsed));
+        if (newElapsed >= VIDEO_DURATION) {
+          setPlaying(false);
+        }
+        return newElapsed;
       });
-    }, 100);
+    }, 50);
 
     return () => {
-      intervalRef.current && clearInterval(intervalRef.current);
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [playing, fakeProgress]);
+    // eslint-disable-next-line
+  }, [playing, startTime]);
 
-  // Pausa ao terminar
-  useEffect(() => {
-    if (fakeProgress >= 1) setPlaying(false);
-  }, [fakeProgress]);
-
-  // Reset ao montar
-  useEffect(() => {
-    setFakeProgress(0);
-    setPlaying(false);
-    setIframeVisible(false);
-  }, []);
-
+  // Play/pause sincronizado com o vídeo do YouTube via API
   function handlePlayPause() {
-    if (!videoReady && !iframeVisible) return;
+    if (!videoReady) return;
     if (!playing) {
-      setIframeVisible(true); // Mostra o vídeo real só ao dar play
+      // Play vídeo
+      setStartTime(Date.now() - elapsed * 1000);
+      setPlaying(true);
+      if (iframeRef.current) {
+        iframeRef.current.contentWindow?.postMessage(
+          '{"event":"command","func":"playVideo","args":""}',
+          "*"
+        );
+      }
+    } else {
+      // Pause vídeo
+      setPlaying(false);
+      if (iframeRef.current) {
+        iframeRef.current.contentWindow?.postMessage(
+          '{"event":"command","func":"pauseVideo","args":""}',
+          "*"
+        );
+      }
     }
-    setPlaying((p) => !p);
   }
 
-  // Quando iframe carrega, libera play
+  // Pausa o vídeo ao finalizar
+  useEffect(() => {
+    if (progress >= 1) {
+      setPlaying(false);
+      if (iframeRef.current) {
+        iframeRef.current.contentWindow?.postMessage(
+          '{"event":"command","func":"pauseVideo","args":""}',
+          "*"
+        );
+      }
+    }
+  }, [progress]);
+
   function handleIframeLoad() {
     setVideoReady(true);
+    // Ativa a API JS do YouTube
+    if (iframeRef.current) {
+      iframeRef.current.contentWindow?.postMessage(
+        '{"event":"listening","id":1}',
+        "*"
+      );
+    }
   }
 
-  // Overlay para bloquear interação com YouTube
-  function Overlay() {
-    return (
-      <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-10">
-        <button
-          className="bg-blue-600 hover:bg-blue-800 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg"
-          style={{ fontSize: 42 }}
-          aria-label="Reproduzir depoimento"
-          onClick={handlePlayPause}
-        >
-          {/* Ícone de play grande */}
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-            <circle cx="18" cy="18" r="18" fill="white" fillOpacity="0.18"/>
-            <polygon points="13,10 28,18 13,26" fill="white"/>
-          </svg>
-        </button>
-      </div>
-    );
-  }
+  // Permite continuar do tempo correto ao dar play novamente
+  useEffect(() => {
+    if (!playing && progress < 1 && videoReady) {
+      // Ao pausar, envia comando para pausar e manter tempo
+      if (iframeRef.current) {
+        iframeRef.current.contentWindow?.postMessage(
+          '{"event":"command","func":"pauseVideo","args":""}',
+          "*"
+        );
+      }
+    }
+  }, [playing, videoReady, progress]);
 
   return (
     <div className="flex flex-col items-center w-full py-5">
@@ -87,32 +139,46 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
           Veja o que mulheres reais dizem depois de treinar com a gente!
         </h2>
         <div className="flex justify-center mb-2">
-          <div className="relative w-full max-w-md rounded-2xl overflow-hidden bg-black shadow-lg aspect-video">
-            {/* Vídeo YouTube (fica invisível até clicar no play customizado) */}
+          <div className="relative w-full max-w-md rounded-2xl overflow-hidden bg-black shadow-lg aspect-video"
+               style={{minHeight: 220}}>
+            {/* Overlay cobre o vídeo se estiver pausado */}
+            <div style={overlayStyle}>
+              <button
+                className="bg-blue-600 hover:bg-blue-800 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg"
+                style={{ fontSize: 42, zIndex: 4 }}
+                aria-label="Reproduzir depoimento"
+                onClick={handlePlayPause}
+              >
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                  <circle cx="18" cy="18" r="18" fill="white" fillOpacity="0.18"/>
+                  <polygon points="13,10 28,18 13,26" fill="white"/>
+                </svg>
+              </button>
+            </div>
+            {/* Vídeo YouTube */}
             <iframe
-              src={`https://www.youtube.com/embed/mBFjVKu13L0?autoplay=${playing ? 1 : 0}&controls=0&modestbranding=1&rel=0`}
+              ref={iframeRef}
+              src={`https://www.youtube.com/embed/mBFjVKu13L0?enablejsapi=1&autoplay=0&controls=0&modestbranding=1&rel=0&fs=0&playsinline=1`}
               title="Depoimento"
               className="w-full h-[220px] md:h-[330px] block"
               style={{
-                visibility: iframeVisible ? "visible" : "hidden",
-                pointerEvents: "none", // Nunca permite interação no iframe
                 position: "absolute",
                 top: 0, left: 0, width: "100%", height: "100%",
                 background: "#111",
+                zIndex: 2,
+                pointerEvents: "none" // nunca permite interação nativa
               }}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               onLoad={handleIframeLoad}
             />
-            {/* Overlay: só remove ao dar play */}
-            {!iframeVisible && <Overlay />}
             {/* Barra de progresso customizada */}
             <div className="absolute left-0 right-0 bottom-0 px-3 pt-8 pb-3 bg-gradient-to-t from-black/60 to-transparent z-20">
               <div className="w-full h-2 bg-neutral-200/40 rounded">
                 <div
                   className="h-2 bg-blue-500 rounded transition-all"
                   style={{
-                    width: `${fakeProgress * 100}%`,
+                    width: `${progress * 100}%`,
                     transition: playing ? "width 0.12s linear" : undefined,
                   }}
                 />
