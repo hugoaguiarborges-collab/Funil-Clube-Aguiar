@@ -5,6 +5,7 @@ import EnqueteResumoObjetivos from "./components/EnqueteResumoObjetivos";
 import EnqueteTravamento from "./components/EnqueteTravamento";
 import EnqueteBiotipo from "./components/EnqueteBiotipo";
 import EnqueteTreinoCasa from "./components/EnqueteTreinoCasa";
+import EnqueteDepoimento from "./components/EnqueteDepoimento";
 
 export default function App() {
   const [step, setStep] = useState<
@@ -15,6 +16,7 @@ export default function App() {
     | "resumo"
     | "travamento"
     | "treinoCasa"
+    | "depoimento"
     | "final"
   >("capa");
   const [idadeSelecionada, setIdadeSelecionada] = useState<string | null>(null);
@@ -136,8 +138,26 @@ export default function App() {
         <EnqueteTreinoCasa
           onSelect={(treinoCasa) => {
             setTreinoCasaSelecionado(treinoCasa);
-            setStep("final");
+            setStep("depoimento");
           }}
+        />
+      </div>
+    );
+  }
+
+  // ENQUETE DEPOIMENTO
+  if (
+    step === "depoimento" &&
+    idadeSelecionada &&
+    biotipoSelecionado &&
+    objetivoSelecionado &&
+    travamentoSelecionado &&
+    treinoCasaSelecionado
+  ) {
+    return (
+      <div className="custom-bg px-2">
+        <EnqueteDepoimento
+          onContinue={() => setStep("final")}
         />
       </div>
     );
