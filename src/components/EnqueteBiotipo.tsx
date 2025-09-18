@@ -17,7 +17,7 @@ export default function EnqueteBiotipo({ onSelect }: Props) {
         <h2 className="text-2xl font-extrabold text-neutral-900 mb-8 text-center">
           Qual desses corpos mais se parece com o seu biotipo hoje?
         </h2>
-        <div className="flex flex-row justify-center gap-[0px] md:gap-[10px]">
+        <div className="flex flex-row justify-center gap-[1px] md:gap-[6px]">
           {options.map((option) => (
             <button
               key={option.value}
