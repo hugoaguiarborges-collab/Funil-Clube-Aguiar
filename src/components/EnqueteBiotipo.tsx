@@ -1,3 +1,7 @@
+type Props = {
+  onSelect: (value: string) => void;
+};
+
 const options = [
   { value: "Biotipo 1", img: "/biotipo-1.png" },
   { value: "Biotipo 2", img: "/biotipo-2.png" },
@@ -6,10 +10,6 @@ const options = [
   { value: "Biotipo 5", img: "/biotipo-5.png" },
 ];
 
-type Props = {
-  onSelect: (value: string) => void;
-};
-
 export default function EnqueteBiotipo({ onSelect }: Props) {
   return (
     <div className="flex flex-col items-center w-full py-5">
@@ -17,18 +17,19 @@ export default function EnqueteBiotipo({ onSelect }: Props) {
         <h2 className="text-2xl font-extrabold text-neutral-900 mb-8 text-center">
           Qual desses corpos mais se parece com o seu biotipo hoje?
         </h2>
-        <div className="flex flex-row justify-center gap-3">
-          {options.map((option, idx) => (
+        <div className="flex flex-row justify-center gap-2 md:gap-4">
+          {options.map((option) => (
             <button
               key={option.value}
               onClick={() => onSelect(option.value)}
               className="rounded-xl overflow-hidden border-2 border-transparent hover:border-blue-500 transition-shadow shadow-lg hover:scale-105 bg-white"
               aria-label={option.value}
+              type="button"
             >
               <img
                 src={option.img}
                 alt={option.value}
-                className="w-[90px] h-auto md:w-[120px]"
+                className="w-[60px] md:w-[100px] h-auto"
                 draggable={false}
               />
             </button>
