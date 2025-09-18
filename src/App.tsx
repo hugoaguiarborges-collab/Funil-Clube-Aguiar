@@ -2,11 +2,13 @@ import { useState } from "react";
 import EnqueteIdade from "./components/EnqueteIdade";
 import EnqueteObjetivo from "./components/EnqueteObjetivo";
 import EnqueteResumoObjetivos from "./components/EnqueteResumoObjetivos";
+import EnqueteTravamento from "./components/EnqueteTravamento";
 
 export default function App() {
-  const [step, setStep] = useState<"capa" | "idade" | "objetivo" | "resumo" | "final">("capa");
+  const [step, setStep] = useState<"capa" | "idade" | "objetivo" | "resumo" | "travamento" | "final">("capa");
   const [idadeSelecionada, setIdadeSelecionada] = useState<string | null>(null);
   const [objetivoSelecionado, setObjetivoSelecionado] = useState<string | null>(null);
+  const [travamentoSelecionado, setTravamentoSelecionado] = useState<string | null>(null);
 
   // CAPA
   if (step === "capa") {
@@ -66,15 +68,29 @@ export default function App() {
     return (
       <div className="custom-bg px-2">
         <EnqueteResumoObjetivos
-          onYes={() => setStep("final")}
-          onNo={() => setStep("final")}
+          onYes={() => setStep("travamento")}
+          onNo={() => setStep("travamento")}
         />
       </div>
     );
   }
 
-  // FINAL OU PRÓXIMA PERGUNTA
-  if (step === "final" && idadeSelecionada && objetivoSelecionado) {
+  // ENQUETE TRAVAMENTO
+  if (step === "travamento" && idadeSelecionada && objetivoSelecionado && !travamentoSelecionado) {
+    return (
+      <div className="custom-bg px-2">
+        <EnqueteTravamento
+          onSelect={(travamento) => {
+            setTravamentoSelecionado(travamento);
+            setStep("final");
+          }}
+        />
+      </div>
+    );
+  }
+
+  // FINAL
+  if (step === "final" && idadeSelecionada && objetivoSelecionado && travamentoSelecionado) {
     return (
       <div className="custom-bg px-2">
         <div className="backdrop-blur-lg bg-green-700/80 p-5 rounded-3xl shadow-2xl shadow-green-900/50 w-full max-w-sm border-4 border-green-900 text-center
@@ -84,6 +100,7 @@ export default function App() {
           <h1 className="text-xl font-bold text-white mb-3">Obrigado!</h1>
           <p className="text-white">Sua faixa etária: <span className="font-bold">{idadeSelecionada}</span></p>
           <p className="text-white">Seu objetivo: <span className="font-bold">{objetivoSelecionado}</span></p>
+          <p className="text-white">O que mais te trava: <span className="font-bold">{travamentoSelecionado}</span></p>
         </div>
       </div>
     );
