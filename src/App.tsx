@@ -1,9 +1,10 @@
 import { useState } from "react";
 import EnqueteIdade from "./components/EnqueteIdade";
 import EnqueteObjetivo from "./components/EnqueteObjetivo";
+import EnqueteResumoObjetivos from "./components/EnqueteResumoObjetivos";
 
 export default function App() {
-  const [step, setStep] = useState<"capa" | "idade" | "objetivo" | "final">("capa");
+  const [step, setStep] = useState<"capa" | "idade" | "objetivo" | "resumo" | "final">("capa");
   const [idadeSelecionada, setIdadeSelecionada] = useState<string | null>(null);
   const [objetivoSelecionado, setObjetivoSelecionado] = useState<string | null>(null);
 
@@ -53,8 +54,20 @@ export default function App() {
         <EnqueteObjetivo
           onSelect={(objetivo) => {
             setObjetivoSelecionado(objetivo);
-            setStep("final");
+            setStep("resumo");
           }}
+        />
+      </div>
+    );
+  }
+
+  // ENQUETE RESUMO DOS OBJETIVOS
+  if (step === "resumo" && idadeSelecionada && objetivoSelecionado) {
+    return (
+      <div className="custom-bg px-2">
+        <EnqueteResumoObjetivos
+          onYes={() => setStep("final")}
+          onNo={() => setStep("final")}
         />
       </div>
     );
