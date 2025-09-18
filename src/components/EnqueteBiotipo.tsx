@@ -17,20 +17,22 @@ export default function EnqueteBiotipo({ onSelect }: Props) {
         <h2 className="text-2xl font-extrabold text-neutral-900 mb-8 text-center">
           Qual desses corpos mais se parece com o seu biotipo hoje?
         </h2>
-        <div className="flex flex-row justify-center gap-2 md:gap-4">
+        <div className="flex flex-row justify-center gap-[6px] md:gap-[10px]">
           {options.map((option) => (
             <button
               key={option.value}
               onClick={() => onSelect(option.value)}
-              className="rounded-xl overflow-hidden border-2 border-transparent hover:border-blue-500 transition-shadow shadow-lg hover:scale-105 bg-white"
+              className="rounded-xl overflow-hidden border-2 border-transparent hover:border-blue-500 transition-shadow shadow-lg hover:scale-105 bg-white p-0"
               aria-label={option.value}
               type="button"
+              style={{margin: 0}}
             >
               <img
                 src={option.img}
                 alt={option.value}
-                className="w-[60px] md:w-[100px] h-auto"
+                className="w-[60px] md:w-[100px] h-auto block"
                 draggable={false}
+                style={{margin: 0, padding: 0, display: "block"}}
               />
             </button>
           ))}
