@@ -4,6 +4,7 @@ import EnqueteObjetivo from "./components/EnqueteObjetivo";
 import EnqueteResumoObjetivos from "./components/EnqueteResumoObjetivos";
 import EnqueteTravamento from "./components/EnqueteTravamento";
 import EnqueteBiotipo from "./components/EnqueteBiotipo";
+import EnqueteTreinoCasa from "./components/EnqueteTreinoCasa";
 
 export default function App() {
   const [step, setStep] = useState<
@@ -13,12 +14,14 @@ export default function App() {
     | "objetivo"
     | "resumo"
     | "travamento"
+    | "treinoCasa"
     | "final"
   >("capa");
   const [idadeSelecionada, setIdadeSelecionada] = useState<string | null>(null);
   const [biotipoSelecionado, setBiotipoSelecionado] = useState<string | null>(null);
   const [objetivoSelecionado, setObjetivoSelecionado] = useState<string | null>(null);
   const [travamentoSelecionado, setTravamentoSelecionado] = useState<string | null>(null);
+  const [treinoCasaSelecionado, setTreinoCasaSelecionado] = useState<string | null>(null);
 
   // CAPA
   if (step === "capa") {
@@ -112,6 +115,27 @@ export default function App() {
         <EnqueteTravamento
           onSelect={(travamento) => {
             setTravamentoSelecionado(travamento);
+            setStep("treinoCasa");
+          }}
+        />
+      </div>
+    );
+  }
+
+  // ENQUETE TREINO EM CASA
+  if (
+    step === "treinoCasa" &&
+    idadeSelecionada &&
+    biotipoSelecionado &&
+    objetivoSelecionado &&
+    travamentoSelecionado &&
+    !treinoCasaSelecionado
+  ) {
+    return (
+      <div className="custom-bg px-2">
+        <EnqueteTreinoCasa
+          onSelect={(treinoCasa) => {
+            setTreinoCasaSelecionado(treinoCasa);
             setStep("final");
           }}
         />
@@ -125,7 +149,8 @@ export default function App() {
     idadeSelecionada &&
     biotipoSelecionado &&
     objetivoSelecionado &&
-    travamentoSelecionado
+    travamentoSelecionado &&
+    treinoCasaSelecionado
   ) {
     return (
       <div className="custom-bg px-2">
@@ -138,6 +163,7 @@ export default function App() {
           <p className="text-white">Seu biotipo: <span className="font-bold">{biotipoSelecionado}</span></p>
           <p className="text-white">Seu objetivo: <span className="font-bold">{objetivoSelecionado}</span></p>
           <p className="text-white">O que mais te trava: <span className="font-bold">{travamentoSelecionado}</span></p>
+          <p className="text-white">Sobre treinar em casa: <span className="font-bold">{treinoCasaSelecionado}</span></p>
         </div>
       </div>
     );
