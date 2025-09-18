@@ -4,7 +4,7 @@ import EnqueteObjetivo from "./components/EnqueteObjetivo";
 import EnqueteResumoObjetivos from "./components/EnqueteResumoObjetivos";
 import EnqueteTravamento from "./components/EnqueteTravamento";
 import EnqueteBiotipo from "./components/EnqueteBiotipo";
-import EnqueteTreinoCasa from "./components/EnqueteTreinoCasa";
+import EnqueteDesafio40Play from "./components/EnqueteDesafio40Play";
 import EnqueteDepoimento from "./components/EnqueteDepoimento";
 import DuvidaGarantia from "./components/DuvidaGarantia";
 
@@ -16,7 +16,7 @@ export default function App() {
     | "objetivo"
     | "resumo"
     | "travamento"
-    | "treinoCasa"
+    | "treinoCasa" // agora é o desafio 40+ play
     | "depoimento"
     | "duvidas"
     | "final"
@@ -126,7 +126,7 @@ export default function App() {
     );
   }
 
-  // ENQUETE TREINO EM CASA
+  // ENQUETE DESAFIO 40+ PLAY (substitui o treinoCasa)
   if (
     step === "treinoCasa" &&
     idadeSelecionada &&
@@ -137,11 +137,8 @@ export default function App() {
   ) {
     return (
       <div className="custom-bg px-2">
-        <EnqueteTreinoCasa
-          onSelect={(treinoCasa) => {
-            setTreinoCasaSelecionado(treinoCasa);
-            setStep("depoimento");
-          }}
+        <EnqueteDesafio40Play
+          onContinue={() => setTreinoCasaSelecionado("desafio40play")}
         />
       </div>
     );
@@ -197,7 +194,7 @@ export default function App() {
           <p className="text-white">Seu biotipo: <span className="font-bold">{biotipoSelecionado}</span></p>
           <p className="text-white">Seu objetivo: <span className="font-bold">{objetivoSelecionado}</span></p>
           <p className="text-white">O que mais te trava: <span className="font-bold">{travamentoSelecionado}</span></p>
-          <p className="text-white">Sobre treinar em casa: <span className="font-bold">{treinoCasaSelecionado}</span></p>
+          <p className="text-white">Sobre o desafio 40+ Play: <span className="font-bold">{treinoCasaSelecionado}</span></p>
         </div>
       </div>
     );
