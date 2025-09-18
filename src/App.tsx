@@ -6,6 +6,7 @@ import EnqueteTravamento from "./components/EnqueteTravamento";
 import EnqueteBiotipo from "./components/EnqueteBiotipo";
 import EnqueteTreinoCasa from "./components/EnqueteTreinoCasa";
 import EnqueteDepoimento from "./components/EnqueteDepoimento";
+import DuvidaGarantia from "./components/DuvidaGarantia";
 
 export default function App() {
   const [step, setStep] = useState<
@@ -17,6 +18,7 @@ export default function App() {
     | "travamento"
     | "treinoCasa"
     | "depoimento"
+    | "duvidas"
     | "final"
   >("capa");
   const [idadeSelecionada, setIdadeSelecionada] = useState<string | null>(null);
@@ -158,6 +160,18 @@ export default function App() {
       <div className="custom-bg px-2">
         <EnqueteDepoimento
           onContinue={() => setStep("final")}
+          onDoubt={() => setStep("duvidas")}
+        />
+      </div>
+    );
+  }
+
+  // PÁGINA DE GARANTIA PARA DÚVIDAS
+  if (step === "duvidas") {
+    return (
+      <div className="custom-bg px-2">
+        <DuvidaGarantia
+          onConfirm={() => setStep("final")}
         />
       </div>
     );
