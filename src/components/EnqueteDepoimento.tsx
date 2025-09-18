@@ -198,7 +198,7 @@ export default function EnqueteDepoimento({ onContinue, onDoubt }: Props) {
             {onContinue && (
               <button
                 onClick={onContinue}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded-xl text-base shadow-lg transition-all duration-300"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl text-base shadow-lg transition-all duration-300"
               >
                 Está decidido! Quero entrar no Desafio!
               </button>
@@ -206,7 +206,7 @@ export default function EnqueteDepoimento({ onContinue, onDoubt }: Props) {
             {onDoubt && (
               <button
                 onClick={onDoubt}
-                className="bg-neutral-100 hover:bg-neutral-200 text-blue-800 font-semibold px-6 py-2 rounded-xl text-base border border-blue-500 shadow transition-all duration-300"
+                className="w-full bg-yellow-700 hover:bg-yellow-800 text-white font-bold px-6 py-3 rounded-xl text-base shadow-lg transition-all duration-300"
               >
                 Eu ainda tenho dúvidas...
               </button>
