@@ -4,14 +4,14 @@ const VIDEO_DURATION = 67; // segundos
 
 type Props = {
   onContinue?: () => void;
+  onDoubt?: () => void;
 };
 
 function easeOutQuad(t: number) {
-  // t de 0 a 1
   return t * (2 - t);
 }
 
-export default function EnqueteDepoimento({ onContinue }: Props) {
+export default function EnqueteDepoimento({ onContinue, onDoubt }: Props) {
   const [playing, setPlaying] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [progress, setProgress] = useState(0); // 0 a 1
@@ -20,7 +20,6 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
   const intervalRef = useRef<number | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
-  // Garante que o overlay cubra SEMPRE o botão do YouTube
   const overlayStyle: React.CSSProperties = {
     position: "absolute",
     inset: 0,
@@ -32,14 +31,11 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
     transition: "opacity 0.2s"
   };
 
-  // Função para atualizar o progresso com ease-out
   function recalcProgress(elapsedTime: number) {
-    // Normaliza t
     const t = Math.min(elapsedTime / VIDEO_DURATION, 1);
     return easeOutQuad(t);
   }
 
-  // Inicia o intervalo de atualização do progresso
   useEffect(() => {
     if (!playing) {
       if (intervalRef.current) {
@@ -70,11 +66,9 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
     // eslint-disable-next-line
   }, [playing, startTime]);
 
-  // Play/pause sincronizado com o vídeo do YouTube via API
   function handlePlayPause() {
     if (!videoReady) return;
     if (!playing) {
-      // Play vídeo
       setStartTime(Date.now() - elapsed * 1000);
       setPlaying(true);
       if (iframeRef.current) {
@@ -84,7 +78,6 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
         );
       }
     } else {
-      // Pause vídeo
       setPlaying(false);
       if (iframeRef.current) {
         iframeRef.current.contentWindow?.postMessage(
@@ -95,7 +88,6 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
     }
   }
 
-  // Pausa o vídeo ao finalizar
   useEffect(() => {
     if (progress >= 1) {
       setPlaying(false);
@@ -110,7 +102,6 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
 
   function handleIframeLoad() {
     setVideoReady(true);
-    // Ativa a API JS do YouTube
     if (iframeRef.current) {
       iframeRef.current.contentWindow?.postMessage(
         '{"event":"listening","id":1}',
@@ -119,10 +110,8 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
     }
   }
 
-  // Permite continuar do tempo correto ao dar play novamente
   useEffect(() => {
     if (!playing && progress < 1 && videoReady) {
-      // Ao pausar, envia comando para pausar e manter tempo
       if (iframeRef.current) {
         iframeRef.current.contentWindow?.postMessage(
           '{"event":"command","func":"pauseVideo","args":""}',
@@ -141,7 +130,6 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
         <div className="flex justify-center mb-2">
           <div className="relative w-full max-w-md rounded-2xl overflow-hidden bg-black shadow-lg aspect-video"
                style={{minHeight: 220}}>
-            {/* Overlay cobre o vídeo se estiver pausado */}
             <div style={overlayStyle}>
               <button
                 className="bg-blue-600 hover:bg-blue-800 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg"
@@ -155,7 +143,6 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
                 </svg>
               </button>
             </div>
-            {/* Vídeo YouTube */}
             <iframe
               ref={iframeRef}
               src={`https://www.youtube.com/embed/mBFjVKu13L0?enablejsapi=1&autoplay=0&controls=0&modestbranding=1&rel=0&fs=0&playsinline=1`}
@@ -166,13 +153,12 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
                 top: 0, left: 0, width: "100%", height: "100%",
                 background: "#111",
                 zIndex: 2,
-                pointerEvents: "none" // nunca permite interação nativa
+                pointerEvents: "none"
               }}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               onLoad={handleIframeLoad}
             />
-            {/* Barra de progresso customizada */}
             <div className="absolute left-0 right-0 bottom-0 px-3 pt-8 pb-3 bg-gradient-to-t from-black/60 to-transparent z-20">
               <div className="w-full h-2 bg-neutral-200/40 rounded">
                 <div
@@ -183,7 +169,6 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
                   }}
                 />
               </div>
-              {/* Controles personalizados */}
               <div className="flex items-center gap-3 mt-2">
                 <button
                   onClick={handlePlayPause}
@@ -193,13 +178,11 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
                   style={{ opacity: videoReady ? 1 : 0.6, cursor: videoReady ? "pointer" : "default" }}
                 >
                   {playing ? (
-                    // Pause icon
                     <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
                       <rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/>
                       <rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/>
                     </svg>
                   ) : (
-                    // Play icon
                     <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
                       <polygon points="7,5 19,12 7,19" fill="currentColor"/>
                     </svg>
@@ -210,14 +193,24 @@ export default function EnqueteDepoimento({ onContinue }: Props) {
             </div>
           </div>
         </div>
-        {onContinue && (
-          <div className="flex justify-center mt-6">
-            <button
-              onClick={onContinue}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded-xl text-base shadow-lg transition-all duration-300"
-            >
-              Continuar
-            </button>
+        {(onContinue || onDoubt) && (
+          <div className="flex flex-col gap-3 justify-center mt-6">
+            {onContinue && (
+              <button
+                onClick={onContinue}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded-xl text-base shadow-lg transition-all duration-300"
+              >
+                Está decidido! Quero entrar no Desafio!
+              </button>
+            )}
+            {onDoubt && (
+              <button
+                onClick={onDoubt}
+                className="bg-neutral-100 hover:bg-neutral-200 text-blue-800 font-semibold px-6 py-2 rounded-xl text-base border border-blue-500 shadow transition-all duration-300"
+              >
+                Eu ainda tenho dúvidas...
+              </button>
+            )}
           </div>
         )}
       </div>
