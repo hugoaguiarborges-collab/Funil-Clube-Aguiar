@@ -17,21 +17,23 @@ type Props = {
 export default function EnqueteIdade({ onSelect }: Props) {
   return (
     <div className="flex flex-col items-center w-full py-5">
-      <h2 className="text-2xl font-extrabold text-neutral-900 mb-6 text-center">Qual sua idade?</h2>
-      <div className="grid grid-cols-2 gap-4 w-full max-w-md">
-        {options.map((option) => (
-          <button
-            key={option.label}
-            type="button"
-            className="relative rounded-2xl overflow-hidden shadow-md transition-transform hover:scale-105 focus:outline-none group"
-            onClick={() => onSelect(option.label)}
-          >
-            <img src={option.img} alt={option.label} className="w-full aspect-square object-cover" />
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-[#235340] bg-opacity-85 px-4 py-2 rounded-lg text-white text-lg font-bold tracking-wide group-hover:bg-opacity-100 transition">
-              {option.label}
-            </div>
-          </button>
-        ))}
+      <div className="w-full max-w-xl bg-white/80 rounded-3xl border border-blue-400 shadow-2xl p-8 backdrop-blur-sm">
+        <h2 className="text-2xl font-extrabold text-neutral-900 mb-6 text-center">Qual sua idade?</h2>
+        <div className="grid grid-cols-2 gap-4 w-full max-w-md mx-auto">
+          {options.map((option) => (
+            <button
+              key={option.label}
+              type="button"
+              className="relative rounded-2xl overflow-hidden shadow-md transition-transform hover:scale-105 focus:outline-none group"
+              onClick={() => onSelect(option.label)}
+            >
+              <img src={option.img} alt={option.label} className="w-full aspect-square object-cover" />
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-[#235340] bg-opacity-85 px-4 py-2 rounded-lg text-white text-lg font-bold tracking-wide group-hover:bg-opacity-100 transition">
+                {option.label}
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
