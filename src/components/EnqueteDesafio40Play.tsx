@@ -8,7 +8,7 @@ export default function EnqueteDesafio40Play({ onContinue }: Props) {
       <div className="w-full max-w-xl bg-white/80 rounded-3xl border border-blue-400 shadow-2xl p-8 backdrop-blur-sm flex flex-col items-center">
         {/* Imagem ilustrativa do desafio, acima do botão */}
         <img
-          src="/gemini-treino-gamificado.jpg"
+          src="/gemini-treino-gamificado.png"
           alt="Treino Desafio 40+ Play"
           className="mb-6 w-full max-w-md rounded-xl object-cover shadow-lg"
         />
