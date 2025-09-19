@@ -20,7 +20,7 @@ export default function Desafio40PlayFeatures({ onContinue }: Props) {
             <img
               src="/check.jpg"
               alt="Check-in do treino"
-              className="w-48 h-48 object-contain mb-5 rounded-xl shadow"
+              className="w-60 h-60 object-contain mb-5 rounded-xl shadow"
               draggable={false}
             />
             <h3 className="text-xl font-extrabold text-neutral-900 mb-2 text-center uppercase tracking-tight">
@@ -35,7 +35,7 @@ export default function Desafio40PlayFeatures({ onContinue }: Props) {
             <img
               src="/rank.jpg"
               alt="Ranking do desafio"
-              className="w-48 h-48 object-contain mb-5 rounded-xl shadow"
+              className="w-60 h-60 object-contain mb-5 rounded-xl shadow"
               draggable={false}
             />
             <h3 className="text-xl font-extrabold text-neutral-900 mb-2 text-center uppercase tracking-tight">
@@ -50,7 +50,7 @@ export default function Desafio40PlayFeatures({ onContinue }: Props) {
             <img
               src="/gemini-generate.png"
               alt="Prêmios do desafio"
-              className="w-48 h-48 object-contain mb-5 rounded-xl shadow"
+              className="w-60 h-60 object-contain mb-5 rounded-xl shadow"
               draggable={false}
             />
             <h3 className="text-xl font-extrabold text-neutral-900 mb-2 text-center uppercase tracking-tight">
