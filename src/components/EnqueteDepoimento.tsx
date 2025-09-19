@@ -3,7 +3,6 @@ import { useRef, useEffect, useState } from "react";
 const VIDEO_DURATION = 67; // segundos
 
 type Props = {
-  onContinue?: () => void;
   onDoubt?: () => void;
 };
 
@@ -11,7 +10,7 @@ function easeOutQuad(t: number) {
   return t * (2 - t);
 }
 
-export default function EnqueteDepoimento({ onContinue, onDoubt }: Props) {
+export default function EnqueteDepoimento({ onDoubt }: Props) {
   const [playing, setPlaying] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [progress, setProgress] = useState(0); // 0 a 1
@@ -129,6 +128,20 @@ export default function EnqueteDepoimento({ onContinue, onDoubt }: Props) {
   return (
     <div className="flex flex-col items-center w-full py-5">
       <div className="w-full max-w-xl bg-white/80 rounded-3xl border border-blue-400 shadow-2xl p-8 backdrop-blur-sm">
+        {/* Logo e título do topo */}
+        <div className="w-full flex flex-col items-center mb-5 mt-1">
+          <img
+            src="/logo-desafio40play.png"
+            alt="Logo Desafio 40+ Play"
+            className="w-28 h-auto mb-2"
+            style={{ maxWidth: 120 }}
+            draggable={false}
+          />
+          <h1 className="text-2xl font-extrabold text-blue-900 tracking-tight text-center">
+            Desafio 40+ Play
+          </h1>
+        </div>
+        {/* Conteúdo principal */}
         <h2 className="text-2xl font-extrabold text-neutral-900 mb-4 text-center">
           Veja o que mulheres reais dizem depois de treinar com a gente!
         </h2>
