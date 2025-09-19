@@ -5,6 +5,7 @@ import EnqueteResumoObjetivos from "./components/EnqueteResumoObjetivos";
 import EnqueteTravamento from "./components/EnqueteTravamento";
 import EnqueteBiotipo from "./components/EnqueteBiotipo";
 import EnqueteDesafio40Play from "./components/EnqueteDesafio40Play";
+import Desafio40PlayFeatures from "./components/Desafio40PlayFeatures";
 import EnqueteDepoimento from "./components/EnqueteDepoimento";
 import DuvidaGarantia from "./components/DuvidaGarantia";
 
@@ -16,7 +17,8 @@ export default function App() {
     | "objetivo"
     | "resumo"
     | "travamento"
-    | "treinoCasa" // agora é o desafio 40+ play
+    | "treinoCasa"
+    | "features"
     | "depoimento"
     | "duvidas"
     | "final"
@@ -138,9 +140,26 @@ export default function App() {
     return (
       <div className="custom-bg px-2">
         <EnqueteDesafio40Play
-          onContinue={() => setTreinoCasaSelecionado("desafio40play")}
+          onContinue={() => {
+            setTreinoCasaSelecionado("desafio40play");
+            setStep("features");
+          }}
         />
       </div>
+    );
+  }
+
+  // NOVA PÁGINA DE FEATURES DO DESAFIO 40+ PLAY
+  if (
+    step === "features" &&
+    idadeSelecionada &&
+    biotipoSelecionado &&
+    objetivoSelecionado &&
+    travamentoSelecionado &&
+    treinoCasaSelecionado
+  ) {
+    return (
+      <Desafio40PlayFeatures onContinue={() => setStep("depoimento")} />
     );
   }
 
