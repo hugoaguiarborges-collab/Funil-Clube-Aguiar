@@ -1,8 +1,8 @@
 const options = [
   { value: "Diminuir a barriga", emoji: "👖" },
   { value: "Se sentir mais confiante com o corpo", emoji: "💃" },
-  { value: "Prevenir doenças e envelhecer com saúde", emoji: "❤️" },
   { value: "Reduzir dores nas articulações", emoji: "🦵" },
+  { value: "Outros" },
 ];
 
 type Props = {
@@ -13,7 +13,7 @@ export default function EnqueteObjetivo({ onSelect }: Props) {
   return (
     <div className="flex flex-col items-center w-full py-5">
       <div className="w-full max-w-xl bg-white/80 rounded-3xl border border-blue-400 shadow-2xl p-8 backdrop-blur-sm">
-        <h2 className="text-2xl font-extrabold text-neutral-900 mb-6 text-center">Qual é o seu objetivo?</h2>
+        <h2 className="text-2xl font-extrabold text-neutral-900 mb-6 text-center">Qual é o seu maior objetivo?</h2>
         <div className="grid grid-cols-1 gap-4 w-full max-w-md mx-auto">
           {options.map((option) => (
             <button
