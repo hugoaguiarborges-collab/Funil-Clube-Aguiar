@@ -57,7 +57,7 @@ export default function Desafio40PlayFeatures({ onContinue }: Props) {
               Ganhe prêmios!
             </h3>
             <p className="text-base text-neutral-700 text-center">
-              Tudo isso vale prêmios: materiais para treinar em casa e até prêmios em dinheiro! Você treina, se diverte, tem resultados e ainda pode ganhar Pix por isso. Tem coisa melhor?
+              Tudo isso vale prêmios: materiais para treinar em casa e até prêmios em dinheiro! Você treina, se diverte, tem resultados e ainda pode ganhar um Pix por isso. Tem coisa melhor?
             </p>
           </div>
         </div>
