@@ -25,7 +25,7 @@ export default function DuvidaGarantia({ onConfirm }: Props) {
           </svg>
           <p className="text-lg font-bold text-neutral-900 mb-1">Seu risco é zero!</p>
           <p className="text-base text-neutral-700 text-center">
-            Se, depois do desafio, você seguir TODAS as orientações e não estiver satisfeito, eu devolvo o seu dinheiro. Sem perguntas. Sem burocracia.
+            Se, depois do desafio, você seguir TODAS as orientações e não estiver satisfeita, eu devolvo o seu dinheiro. Sem perguntas. Sem burocracia.
           </p>
         </div>
       </div>
