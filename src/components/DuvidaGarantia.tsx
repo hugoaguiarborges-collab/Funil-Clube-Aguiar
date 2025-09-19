@@ -1,8 +1,4 @@
-type Props = {
-  onConfirm?: () => void;
-};
-
-export default function DuvidaGarantia({ onConfirm }: Props) {
+export default function DuvidaGarantia() {
   // AÇÃO DO BOTÃO: DIRECIONA PARA O WHATSAPP
   function handleConfirm() {
     window.open("https://chat.whatsapp.com/DboiSaIt3WW9ua5Mv76bmb?mode=ems_copy_t", "_blank");
