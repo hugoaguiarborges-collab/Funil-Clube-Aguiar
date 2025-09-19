@@ -7,7 +7,7 @@ export default function Desafio40PlayFeatures({ onContinue }: Props) {
     <div
       className="min-h-screen flex flex-col justify-center items-center px-2 py-8"
       style={{
-        backgroundImage: "url('/bg-fundo.jpg')", // coloque o nome correto da sua imagem de fundo
+        backgroundImage: "url('/bg-fundo.png')", // coloque o nome correto da sua imagem de fundo
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
