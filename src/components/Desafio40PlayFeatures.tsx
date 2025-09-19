@@ -4,7 +4,15 @@ type Props = {
 
 export default function Desafio40PlayFeatures({ onContinue }: Props) {
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-neutral-50 px-2 py-8">
+    <div
+      className="min-h-screen flex flex-col justify-center items-center px-2 py-8"
+      style={{
+        backgroundImage: "url('/bg-fundo.jpg')", // coloque o nome correto da sua imagem de fundo
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <div className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl py-8 px-4 md:px-12 flex flex-col items-center">
         <div className="w-full flex flex-col md:flex-row gap-8 md:gap-4 justify-center mb-8">
           {/* CARD 1 */}
