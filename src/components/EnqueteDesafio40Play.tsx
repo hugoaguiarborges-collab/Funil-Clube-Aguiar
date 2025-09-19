@@ -10,7 +10,7 @@ export default function EnqueteDesafio40Play({ onContinue }: Props) {
         <img
           src="/gemini-treino-gamificado.png"
           alt="Treino Desafio 40+ Play"
-          className="mb-6 w-full max-w-2xl h-auto rounded-xl object-cover shadow-lg"
+          className="mb-6 w-full max-w-4xl h-auto rounded-xl object-cover shadow-lg"
           style={{ aspectRatio: '16/7', maxHeight: 340 }}
         />
 
@@ -18,9 +18,7 @@ export default function EnqueteDesafio40Play({ onContinue }: Props) {
         <div className="w-full max-w-2xl mx-auto text-center">
           <p className="text-lg md:text-xl font-semibold text-neutral-900 mb-6 leading-snug">
             E se, além de conquistar resultados reais com treinos simples em casa,<br />
-            você pudesse transformar sua rotina em uma experiência divertida,<br />
-            colecionando pontos a cada treino, subindo no ranking<br />
-            e participando de um jogo saudável de competição<br />
+            você participasse de um jogo saudável de competição<br />
             com outras alunas e também consigo mesma?
           </p>
           <p className="text-base md:text-lg text-neutral-800 mb-8 leading-snug font-normal">
