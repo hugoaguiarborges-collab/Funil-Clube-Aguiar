@@ -10,7 +10,7 @@ export default function Desafio40PlayFeatures({ onContinue }: Props) {
           {/* CARD 1 */}
           <div className="flex-1 bg-white rounded-2xl shadow-md py-8 px-5 flex flex-col items-center border border-neutral-100">
             <img
-              src="/check.jpg"
+              src="/check.png"
               alt="Check-in do treino"
               className="w-32 h-32 object-contain mb-5 rounded-xl shadow"
               draggable={false}
