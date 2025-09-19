@@ -121,6 +121,11 @@ export default function EnqueteDepoimento({ onContinue, onDoubt }: Props) {
     }
   }, [playing, videoReady, progress]);
 
+  // AÇÃO DO BOTÃO: DIRECIONA PARA O WHATSAPP
+  function handleContinue() {
+    window.open("https://chat.whatsapp.com/DboiSaIt3WW9ua5Mv76bmb?mode=ems_copy_t", "_blank");
+  }
+
   return (
     <div className="flex flex-col items-center w-full py-5">
       <div className="w-full max-w-xl bg-white/80 rounded-3xl border border-blue-400 shadow-2xl p-8 backdrop-blur-sm">
@@ -193,26 +198,22 @@ export default function EnqueteDepoimento({ onContinue, onDoubt }: Props) {
             </div>
           </div>
         </div>
-        {(onContinue || onDoubt) && (
-          <div className="flex flex-col gap-3 justify-center mt-6">
-            {onContinue && (
-              <button
-                onClick={onContinue}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl text-base shadow-lg transition-all duration-300"
-              >
-                Está decidido! Quero entrar no Desafio!
-              </button>
-            )}
-            {onDoubt && (
-              <button
-                onClick={onDoubt}
-                className="w-full bg-yellow-700 hover:bg-yellow-800 text-white font-bold px-6 py-3 rounded-xl text-base shadow-lg transition-all duration-300"
-              >
-                Eu ainda tenho dúvidas...
-              </button>
-            )}
-          </div>
-        )}
+        <div className="flex flex-col gap-3 justify-center mt-6">
+          <button
+            onClick={handleContinue}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl text-base shadow-lg transition-all duration-300"
+          >
+            Está decidido! Quero entrar no Desafio!
+          </button>
+          {onDoubt && (
+            <button
+              onClick={onDoubt}
+              className="w-full bg-yellow-700 hover:bg-yellow-800 text-white font-bold px-6 py-3 rounded-xl text-base shadow-lg transition-all duration-300"
+            >
+              Eu ainda tenho dúvidas...
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
