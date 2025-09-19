@@ -3,6 +3,11 @@ type Props = {
 };
 
 export default function DuvidaGarantia({ onConfirm }: Props) {
+  // AÇÃO DO BOTÃO: DIRECIONA PARA O WHATSAPP
+  function handleConfirm() {
+    window.open("https://chat.whatsapp.com/DboiSaIt3WW9ua5Mv76bmb?mode=ems_copy_t", "_blank");
+  }
+
   return (
     <div className="flex flex-col items-center w-full min-h-screen py-4 bg-white">
       {/* Barra de progresso verde */}
@@ -32,7 +37,7 @@ export default function DuvidaGarantia({ onConfirm }: Props) {
 
       {/* Botão de ação */}
       <button
-        onClick={onConfirm}
+        onClick={handleConfirm}
         className="w-full max-w-md mx-auto bg-green-600 hover:bg-green-700 text-white font-bold text-lg rounded-xl py-4 mb-4 transition-all duration-200 shadow-xl"
       >
         Não tenho nada a perder! Quero participar do Desafio!
