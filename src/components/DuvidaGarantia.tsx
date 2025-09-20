@@ -1,7 +1,14 @@
-export default function DuvidaGarantia() {
+type Props = {
+  onConfirm?: () => void;
+};
+
+export default function DuvidaGarantia({ onConfirm }: Props) {
   // AÇÃO DO BOTÃO: DIRECIONA PARA O WHATSAPP
   function handleConfirm() {
-    window.open("https://chat.whatsapp.com/DboiSaIt3WW9ua5Mv76bmb?mode=ems_copy_t", "_blank");
+    const numero = localStorage.getItem("aluna_whatsapp") || "";
+    const numeroLimpo = numero.replace(/\D/g, "");
+    window.open(`https://wa.me/55${numeroLimpo}`, "_blank");
+    if (onConfirm) onConfirm();
   }
 
   return (
