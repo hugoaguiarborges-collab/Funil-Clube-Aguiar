@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 // Altere para uma senha segura. Só quem souber poderá acessar o admin!
 const SENHA_ADMIN = "112233hugo";
@@ -9,11 +9,13 @@ type Lead = {
   data?: string;
 };
 
-export default function Admin() {
+const Admin: React.FC = () => {
   const [autorizado, setAutorizado] = useState(false);
   const [senha, setSenha] = useState("");
   const [leads, setLeads] = useState<Lead[]>(() =>
-    JSON.parse(localStorage.getItem("leads") || "[]")
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("leads") || "[]")
+      : []
   );
 
   // Atualiza os leads manualmente (caso algum lead novo seja salvo em outra aba)
@@ -175,4 +177,6 @@ export default function Admin() {
       </table>
     </div>
   );
-}
+};
+
+export default Admin;
