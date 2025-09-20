@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-const SENHA_ADMIN = "112233hugo"; // 
+// Altere para uma senha segura. Só quem souber poderá acessar o admin!
+const SENHA_ADMIN = "112233hugo";
 
 type Lead = {
   nome: string;
@@ -15,10 +16,12 @@ export default function Admin() {
     JSON.parse(localStorage.getItem("leads") || "[]")
   );
 
+  // Atualiza os leads manualmente (caso algum lead novo seja salvo em outra aba)
   function atualizarLeads() {
     setLeads(JSON.parse(localStorage.getItem("leads") || "[]"));
   }
 
+  // Exporta os leads para um arquivo CSV (Excel)
   function exportarCSV() {
     const header = "Nome,WhatsApp,Data\n";
     const body = leads
@@ -39,6 +42,7 @@ export default function Admin() {
     window.URL.revokeObjectURL(url);
   }
 
+  // Abre o WhatsApp em uma nova aba para todos os leads (um a um)
   function abrirTodosWhatsApp() {
     leads.forEach((lead) => {
       const numeroLimpo = lead.whatsapp.replace(/\D/g, "");
@@ -49,6 +53,7 @@ export default function Admin() {
     });
   }
 
+  // Copia todos os links de WhatsApp para área de transferência
   function copiarLinksWhatsApp() {
     const links = leads
       .map((lead) => {
@@ -60,6 +65,7 @@ export default function Admin() {
     alert("Links copiados para a área de transferência!");
   }
 
+  // Abre o WhatsApp individualmente para o lead selecionado
   function abrirUmWhatsApp(lead: Lead) {
     const numeroLimpo = lead.whatsapp.replace(/\D/g, "");
     const msg = encodeURIComponent(
