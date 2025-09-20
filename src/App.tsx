@@ -10,6 +10,10 @@ import EnqueteDepoimento from "./components/EnqueteDepoimento";
 import DuvidaGarantia from "./components/DuvidaGarantia";
 import CadastroAluno from "./components/CadastroAluno";
 
+// --- IMPORTANTE: Adicione o React Router DOM ---
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Admin from "./Admin"; // Certifique-se de que o arquivo src/Admin.jsx existe
+
 export default function App() {
   const [step, setStep] = useState<
     | "capa"
@@ -31,210 +35,223 @@ export default function App() {
   const [travamentoSelecionado, setTravamentoSelecionado] = useState<string | null>(null);
   const [treinoCasaSelecionado, setTreinoCasaSelecionado] = useState<string | null>(null);
 
-  // CAPA
-  if (step === "capa") {
-    return (
-      <div className="custom-bg px-2">
-        <div className="backdrop-blur-lg bg-blue-800/75 p-5 rounded-3xl shadow-2xl shadow-blue-900/50 w-full max-w-sm border-4 border-blue-600
-          transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_12px_32px_8px_rgba(0,0,60,0.35)] 
-          ring-2 ring-yellow-300/40 drop-shadow-lg"
-        >
-          <h1 className="text-2xl font-extrabold text-white mb-3 drop-shadow-lg">
-            Bem-vinda ao Desafio 40+ Play!
-          </h1>
-          <p className="text-white mb-6 font-medium drop-shadow">
-            Faça parte do desafio mais divertido e motivador para mulheres com mais de 40 anos
-          </p>
-          <button
-            className="bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-blue-900 font-bold px-6 py-2 rounded-xl text-lg shadow-lg hover:scale-105 hover:brightness-105 transition-all duration-300 ring-2 ring-yellow-100/50"
-            onClick={() => setStep("idade")}
+  // Página principal (todas enquetes e fluxo do desafio)
+  function MainFlow() {
+    // CAPA
+    if (step === "capa") {
+      return (
+        <div className="custom-bg px-2">
+          <div className="backdrop-blur-lg bg-blue-800/75 p-5 rounded-3xl shadow-2xl shadow-blue-900/50 w-full max-w-sm border-4 border-blue-600
+            transform transition-transform duration-300 hover:scale-105 hover:shadow-[0_12px_32px_8px_rgba(0,0,60,0.35)] 
+            ring-2 ring-yellow-300/40 drop-shadow-lg"
           >
-            Quero participar
-          </button>
+            <h1 className="text-2xl font-extrabold text-white mb-3 drop-shadow-lg">
+              Bem-vinda ao Desafio 40+ Play!
+            </h1>
+            <p className="text-white mb-6 font-medium drop-shadow">
+              Faça parte do desafio mais divertido e motivador para mulheres com mais de 40 anos
+            </p>
+            <button
+              className="bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-blue-900 font-bold px-6 py-2 rounded-xl text-lg shadow-lg hover:scale-105 hover:brightness-105 transition-all duration-300 ring-2 ring-yellow-100/50"
+              onClick={() => setStep("idade")}
+            >
+              Quero participar
+            </button>
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  // ENQUETE IDADE
-  if (step === "idade" && !idadeSelecionada) {
-    return (
-      <div className="custom-bg px-2">
-        <EnqueteIdade
-          onSelect={(idade) => {
-            setIdadeSelecionada(idade);
-            setStep("biotipo");
-          }}
-        />
-      </div>
-    );
-  }
-
-  // ENQUETE BIOTIPO
-  if (step === "biotipo" && idadeSelecionada && !biotipoSelecionado) {
-    return (
-      <div className="custom-bg px-2">
-        <EnqueteBiotipo
-          onSelect={(biotipo) => {
-            setBiotipoSelecionado(biotipo);
-            setStep("objetivo");
-          }}
-        />
-      </div>
-    );
-  }
-
-  // ENQUETE OBJETIVO
-  if (step === "objetivo" && idadeSelecionada && biotipoSelecionado && !objetivoSelecionado) {
-    return (
-      <div className="custom-bg px-2">
-        <EnqueteObjetivo
-          onSelect={(objetivo) => {
-            setObjetivoSelecionado(objetivo);
-            setStep("resumo");
-          }}
-        />
-      </div>
-    );
-  }
-
-  // ENQUETE RESUMO DOS OBJETIVOS
-  if (step === "resumo" && idadeSelecionada && biotipoSelecionado && objetivoSelecionado) {
-    return (
-      <div className="custom-bg px-2">
-        <EnqueteResumoObjetivos
-          onYes={() => setStep("travamento")}
-          onNo={() => setStep("travamento")}
-        />
-      </div>
-    );
-  }
-
-  // ENQUETE TRAVAMENTO
-  if (
-    step === "travamento" &&
-    idadeSelecionada &&
-    biotipoSelecionado &&
-    objetivoSelecionado &&
-    !travamentoSelecionado
-  ) {
-    return (
-      <div className="custom-bg px-2">
-        <EnqueteTravamento
-          onSelect={(travamento) => {
-            setTravamentoSelecionado(travamento);
-            setStep("treinoCasa");
-          }}
-        />
-      </div>
-    );
-  }
-
-  // ENQUETE DESAFIO 40+ PLAY (substitui o treinoCasa)
-  if (
-    step === "treinoCasa" &&
-    idadeSelecionada &&
-    biotipoSelecionado &&
-    objetivoSelecionado &&
-    travamentoSelecionado &&
-    !treinoCasaSelecionado
-  ) {
-    return (
-      <div className="custom-bg px-2">
-        <EnqueteDesafio40Play
-          onContinue={() => {
-            setTreinoCasaSelecionado("desafio40play");
-            setStep("features");
-          }}
-        />
-      </div>
-    );
-  }
-
-  // NOVA PÁGINA DE FEATURES DO DESAFIO 40+ PLAY
-  if (
-    step === "features" &&
-    idadeSelecionada &&
-    biotipoSelecionado &&
-    objetivoSelecionado &&
-    travamentoSelecionado &&
-    treinoCasaSelecionado
-  ) {
-    return (
-      <Desafio40PlayFeatures onContinue={() => setStep("cadastro")} />
-    );
-  }
-
-  // NOVA PÁGINA DE CADASTRO (nome + whatsapp)
-  if (
-    step === "cadastro" &&
-    idadeSelecionada &&
-    biotipoSelecionado &&
-    objetivoSelecionado &&
-    travamentoSelecionado &&
-    treinoCasaSelecionado
-  ) {
-    return (
-      <div className="custom-bg px-2">
-        <CadastroAluno onContinue={() => setStep("depoimento")} />
-      </div>
-    );
-  }
-
-  // ENQUETE DEPOIMENTO
-  if (
-    step === "depoimento" &&
-    idadeSelecionada &&
-    biotipoSelecionado &&
-    objetivoSelecionado &&
-    travamentoSelecionado &&
-    treinoCasaSelecionado
-  ) {
-    return (
-      <div className="custom-bg px-2">
-        <EnqueteDepoimento
-          onDoubt={() => setStep("duvidas")}
-        />
-      </div>
-    );
-  }
-
-  // PÁGINA DE GARANTIA PARA DÚVIDAS
-  if (step === "duvidas") {
-    return (
-      <div className="custom-bg px-2">
-        <DuvidaGarantia
-          onConfirm={() => setStep("depoimento")}
-        />
-      </div>
-    );
-  }
-
-  // FINAL
-  if (
-    step === "final" &&
-    idadeSelecionada &&
-    biotipoSelecionado &&
-    objetivoSelecionado &&
-    travamentoSelecionado &&
-    treinoCasaSelecionado
-  ) {
-    return (
-      <div className="custom-bg px-2">
-        <div className="backdrop-blur-lg bg-green-700/80 p-5 rounded-3xl shadow-2xl shadow-green-900/50 w-full max-w-sm border-4 border-green-900 text-center
-          transform transition-transform duration-300
-          md:mb-0 mb-3"
-        >
-          <h1 className="text-xl font-bold text-white mb-3">Obrigado!</h1>
-          <p className="text-white">Sua faixa etária: <span className="font-bold">{idadeSelecionada}</span></p>
-          <p className="text-white">Seu biotipo: <span className="font-bold">{biotipoSelecionado}</span></p>
-          <p className="text-white">Seu objetivo: <span className="font-bold">{objetivoSelecionado}</span></p>
-          <p className="text-white">O que mais te trava: <span className="font-bold">{travamentoSelecionado}</span></p>
-          <p className="text-white">Sobre o desafio 40+ Play: <span className="font-bold">{treinoCasaSelecionado}</span></p>
+    // ENQUETE IDADE
+    if (step === "idade" && !idadeSelecionada) {
+      return (
+        <div className="custom-bg px-2">
+          <EnqueteIdade
+            onSelect={(idade) => {
+              setIdadeSelecionada(idade);
+              setStep("biotipo");
+            }}
+          />
         </div>
-      </div>
-    );
+      );
+    }
+
+    // ENQUETE BIOTIPO
+    if (step === "biotipo" && idadeSelecionada && !biotipoSelecionado) {
+      return (
+        <div className="custom-bg px-2">
+          <EnqueteBiotipo
+            onSelect={(biotipo) => {
+              setBiotipoSelecionado(biotipo);
+              setStep("objetivo");
+            }}
+          />
+        </div>
+      );
+    }
+
+    // ENQUETE OBJETIVO
+    if (step === "objetivo" && idadeSelecionada && biotipoSelecionado && !objetivoSelecionado) {
+      return (
+        <div className="custom-bg px-2">
+          <EnqueteObjetivo
+            onSelect={(objetivo) => {
+              setObjetivoSelecionado(objetivo);
+              setStep("resumo");
+            }}
+          />
+        </div>
+      );
+    }
+
+    // ENQUETE RESUMO DOS OBJETIVOS
+    if (step === "resumo" && idadeSelecionada && biotipoSelecionado && objetivoSelecionado) {
+      return (
+        <div className="custom-bg px-2">
+          <EnqueteResumoObjetivos
+            onYes={() => setStep("travamento")}
+            onNo={() => setStep("travamento")}
+          />
+        </div>
+      );
+    }
+
+    // ENQUETE TRAVAMENTO
+    if (
+      step === "travamento" &&
+      idadeSelecionada &&
+      biotipoSelecionado &&
+      objetivoSelecionado &&
+      !travamentoSelecionado
+    ) {
+      return (
+        <div className="custom-bg px-2">
+          <EnqueteTravamento
+            onSelect={(travamento) => {
+              setTravamentoSelecionado(travamento);
+              setStep("treinoCasa");
+            }}
+          />
+        </div>
+      );
+    }
+
+    // ENQUETE DESAFIO 40+ PLAY (substitui o treinoCasa)
+    if (
+      step === "treinoCasa" &&
+      idadeSelecionada &&
+      biotipoSelecionado &&
+      objetivoSelecionado &&
+      travamentoSelecionado &&
+      !treinoCasaSelecionado
+    ) {
+      return (
+        <div className="custom-bg px-2">
+          <EnqueteDesafio40Play
+            onContinue={() => {
+              setTreinoCasaSelecionado("desafio40play");
+              setStep("features");
+            }}
+          />
+        </div>
+      );
+    }
+
+    // NOVA PÁGINA DE FEATURES DO DESAFIO 40+ PLAY
+    if (
+      step === "features" &&
+      idadeSelecionada &&
+      biotipoSelecionado &&
+      objetivoSelecionado &&
+      travamentoSelecionado &&
+      treinoCasaSelecionado
+    ) {
+      return (
+        <Desafio40PlayFeatures onContinue={() => setStep("cadastro")} />
+      );
+    }
+
+    // NOVA PÁGINA DE CADASTRO (nome + whatsapp)
+    if (
+      step === "cadastro" &&
+      idadeSelecionada &&
+      biotipoSelecionado &&
+      objetivoSelecionado &&
+      travamentoSelecionado &&
+      treinoCasaSelecionado
+    ) {
+      return (
+        <div className="custom-bg px-2">
+          <CadastroAluno onContinue={() => setStep("depoimento")} />
+        </div>
+      );
+    }
+
+    // ENQUETE DEPOIMENTO
+    if (
+      step === "depoimento" &&
+      idadeSelecionada &&
+      biotipoSelecionado &&
+      objetivoSelecionado &&
+      travamentoSelecionado &&
+      treinoCasaSelecionado
+    ) {
+      return (
+        <div className="custom-bg px-2">
+          <EnqueteDepoimento
+            onDoubt={() => setStep("duvidas")}
+          />
+        </div>
+      );
+    }
+
+    // PÁGINA DE GARANTIA PARA DÚVIDAS
+    if (step === "duvidas") {
+      return (
+        <div className="custom-bg px-2">
+          <DuvidaGarantia
+            onConfirm={() => setStep("depoimento")}
+          />
+        </div>
+      );
+    }
+
+    // FINAL
+    if (
+      step === "final" &&
+      idadeSelecionada &&
+      biotipoSelecionado &&
+      objetivoSelecionado &&
+      travamentoSelecionado &&
+      treinoCasaSelecionado
+    ) {
+      return (
+        <div className="custom-bg px-2">
+          <div className="backdrop-blur-lg bg-green-700/80 p-5 rounded-3xl shadow-2xl shadow-green-900/50 w-full max-w-sm border-4 border-green-900 text-center
+            transform transition-transform duration-300
+            md:mb-0 mb-3"
+          >
+            <h1 className="text-xl font-bold text-white mb-3">Obrigado!</h1>
+            <p className="text-white">Sua faixa etária: <span className="font-bold">{idadeSelecionada}</span></p>
+            <p className="text-white">Seu biotipo: <span className="font-bold">{biotipoSelecionado}</span></p>
+            <p className="text-white">Seu objetivo: <span className="font-bold">{objetivoSelecionado}</span></p>
+            <p className="text-white">O que mais te trava: <span className="font-bold">{travamentoSelecionado}</span></p>
+            <p className="text-white">Sobre o desafio 40+ Play: <span className="font-bold">{treinoCasaSelecionado}</span></p>
+          </div>
+        </div>
+      );
+    }
+
+    return null;
   }
 
-  return null;
+  // --- ROTAS DA APLICAÇÃO ---
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainFlow />} />
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
