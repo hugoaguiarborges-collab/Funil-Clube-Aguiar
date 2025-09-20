@@ -8,6 +8,7 @@ import EnqueteDesafio40Play from "./components/EnqueteDesafio40Play";
 import Desafio40PlayFeatures from "./components/Desafio40PlayFeatures";
 import EnqueteDepoimento from "./components/EnqueteDepoimento";
 import DuvidaGarantia from "./components/DuvidaGarantia";
+import CadastroAluno from "./components/CadastroAluno";
 
 export default function App() {
   const [step, setStep] = useState<
@@ -19,6 +20,7 @@ export default function App() {
     | "travamento"
     | "treinoCasa"
     | "features"
+    | "cadastro"
     | "depoimento"
     | "duvidas"
     | "final"
@@ -159,7 +161,23 @@ export default function App() {
     treinoCasaSelecionado
   ) {
     return (
-      <Desafio40PlayFeatures onContinue={() => setStep("depoimento")} />
+      <Desafio40PlayFeatures onContinue={() => setStep("cadastro")} />
+    );
+  }
+
+  // NOVA PÁGINA DE CADASTRO (nome + whatsapp)
+  if (
+    step === "cadastro" &&
+    idadeSelecionada &&
+    biotipoSelecionado &&
+    objetivoSelecionado &&
+    travamentoSelecionado &&
+    treinoCasaSelecionado
+  ) {
+    return (
+      <div className="custom-bg px-2">
+        <CadastroAluno onContinue={() => setStep("depoimento")} />
+      </div>
     );
   }
 
@@ -175,7 +193,6 @@ export default function App() {
     return (
       <div className="custom-bg px-2">
         <EnqueteDepoimento
-          onContinue={() => setStep("final")}
           onDoubt={() => setStep("duvidas")}
         />
       </div>
@@ -187,7 +204,7 @@ export default function App() {
     return (
       <div className="custom-bg px-2">
         <DuvidaGarantia
-          onConfirm={() => setStep("final")}
+          onConfirm={() => setStep("depoimento")}
         />
       </div>
     );
