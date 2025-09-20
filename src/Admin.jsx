@@ -15,6 +15,7 @@ export default function Admin() {
         Bem-vindo, administrador! <br />
         Aqui você pode gerenciar as enquetes, visualizar resultados e editar conteúdos do Clube Aguiar.
       </p>
+      {/* Adicione botões e funcionalidades administrativas aqui se desejar */}
     </div>
   );
 }
