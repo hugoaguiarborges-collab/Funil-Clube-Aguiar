@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-export default function CadastroAluno() {
+type Props = {
+  onContinue: () => void;
+};
+
+export default function CadastroAluno({ onContinue }: Props) {
   const [nome, setNome] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [erro, setErro] = useState("");
@@ -22,13 +26,12 @@ export default function CadastroAluno() {
     }
     setErro("");
 
-    // Opcional: salve no localStorage
+    // Salva no localStorage para uso posterior
     localStorage.setItem("aluna_nome", nome);
     localStorage.setItem("aluna_whatsapp", whatsapp);
 
-    // Direciona para o WhatsApp (personalize o link se quiser mensagem automática)
-    const numeroLimpo = whatsapp.replace(/\D/g, "");
-    window.open(`https://wa.me/55${numeroLimpo}`, "_blank");
+    // Avança para depoimento
+    onContinue();
   }
 
   return (
@@ -73,7 +76,7 @@ export default function CadastroAluno() {
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-lg mt-2 transition"
           >
-            Avançar para o WhatsApp
+            Avançar
           </button>
         </form>
       </div>
