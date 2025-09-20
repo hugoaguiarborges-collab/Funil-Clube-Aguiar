@@ -1,10 +1,10 @@
 import { useRef, useEffect, useState } from "react";
 
-const VIDEO_DURATION = 67; // segundos
-
 type Props = {
   onDoubt?: () => void;
 };
+
+const VIDEO_DURATION = 67; // segundos
 
 function easeOutQuad(t: number) {
   return t * (2 - t);
@@ -120,9 +120,12 @@ export default function EnqueteDepoimento({ onDoubt }: Props) {
     }
   }, [playing, videoReady, progress]);
 
-  // AÇÃO DO BOTÃO: DIRECIONA PARA O WHATSAPP
+  // Ao clicar "Quero entrar" vai para o WhatsApp
   function handleContinue() {
-    window.open("https://chat.whatsapp.com/DboiSaIt3WW9ua5Mv76bmb?mode=ems_copy_t", "_blank");
+    // Recupera o número salvo no cadastro
+    const whats = localStorage.getItem("aluna_whatsapp") || "";
+    const numeroLimpo = whats.replace(/\D/g, "");
+    window.open(`https://wa.me/55${numeroLimpo}`, "_blank");
   }
 
   return (
