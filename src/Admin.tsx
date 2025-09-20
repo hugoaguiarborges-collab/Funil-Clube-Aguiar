@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Admin() {
+const Admin: React.FC = () => {
   return (
     <div style={{
       minHeight: "100vh",
@@ -18,4 +18,6 @@ export default function Admin() {
       {/* Adicione botões e funcionalidades administrativas aqui se desejar */}
     </div>
   );
-}
+};
+
+export default Admin;
