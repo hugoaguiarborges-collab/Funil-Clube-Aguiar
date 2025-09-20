@@ -12,7 +12,7 @@ import CadastroAluno from "./components/CadastroAluno";
 
 // --- IMPORTANTE: Adicione o React Router DOM ---
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Admin from "./Admin"; // Certifique-se de que o arquivo src/Admin.jsx existe
+import Admin from "./components/Admin";
 
 export default function App() {
   const [step, setStep] = useState<
