@@ -1,14 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" href="/logo-desafio40play.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Funil Clube Aguiar</title>
-    <script type="module" crossorigin src="/assets/index-6AGPBKp6.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DWgwtoM5.css">
+    <script type="module" crossorigin src="/assets/index-BFDYPiqW.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Bi2jf2dl.css">
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Círculo azul discreto para admin -->
+    <style>
+      #adminBall {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 22px;
+        height: 22px;
+        background: #2176ff;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 9999;
+        opacity: 0.3;
+        transition: opacity 0.2s;
+      }
+      #adminBall:hover { opacity: 0.7; }
+      #adminLoginPopup {
+        display: none;
+        position: fixed;
+        bottom: 52px;
+        right: 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px 14px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        z-index: 10000;
+        min-width: 140px;
+      }
+      #adminLoginPopup input[type="password"] {
+        padding: 5px;
+        font-size: 1em;
+        margin-bottom: 4px;
+        border: 1px solid #bbb;
+        border-radius: 4px;
+        outline: none;
+        width: 100%;
+      }
+      #adminLoginPopup button {
+        background: #2176ff;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        padding: 4px 10px;
+        font-size: 1em;
+        cursor: pointer;
+        width: 100%;
+      }
+      #adminLoginPopup button:hover { background: #1a5cc8; }
+      #adminError {
+        color: red;
+        font-size: 0.92em;
+        display: none;
+        margin-top: 2px;
+        text-align: center;
+      }
+    </style>
+
+    <div id="adminBall" title="Admin"></div>
+    <div id="adminLoginPopup">
+      <form id="adminLoginForm" onsubmit="return false">
+        <input type="password" id="adminPassword" placeholder="Senha admin" autocomplete="off" />
+        <button onclick="checkAdminPassword()">Entrar</button>
+        <div id="adminError">Senha incorreta.</div>
+      </form>
+    </div>
+
+    <script>
+      const adminBall = document.getElementById('adminBall');
+      const adminPopup = document.getElementById('adminLoginPopup');
+      const adminError = document.getElementById('adminError');
+      adminBall.onclick = function() {
+        adminPopup.style.display = (adminPopup.style.display === 'block') ? 'none' : 'block';
+        adminError.style.display = 'none';
+        document.getElementById('adminPassword').value = '';
+        setTimeout(()=>document.getElementById('adminPassword').focus(), 100);
+      };
+      window.onclick = function(e) {
+        if (
+          adminPopup.style.display === 'block' &&
+          e.target !== adminBall &&
+          !adminPopup.contains(e.target)
+        ) {
+          adminPopup.style.display = 'none';
+        }
+      };
+      function checkAdminPassword() {
+        const senha = document.getElementById('adminPassword').value;
+        // Senha padrão (troque se quiser)
+        if (senha === '112233hugo') {
+          window.location.href = '/admin';
+        } else {
+          adminError.style.display = 'block';
+        }
+      }
+    </script>
+
   </body>
 </html>
