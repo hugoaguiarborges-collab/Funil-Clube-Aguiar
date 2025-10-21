@@ -1,23 +1,42 @@
 import { useRef, useEffect, useState } from "react";
 
 type Props = {
+  travamento: string;
+  onContinue: () => void;
   onDoubt?: () => void;
 };
 
 const VIDEO_DURATION = 67; // segundos
+const REQUIRED_SECONDS = 15; // tempo mínimo (segundos) para liberar o botão
 
 function easeOutQuad(t: number) {
   return t * (2 - t);
 }
 
-export default function EnqueteDepoimento({ onDoubt }: Props) {
+// Função para gerar texto persuasivo conforme o travamento
+function textoDepoimento(travamento: string) {
+  switch (travamento) {
+    case "começo animada mas logo desanimo":
+      return "Se você costuma começar cheia de energia e acaba desanimando, veja o que mulheres reais que passaram por isso têm a dizer após treinarem conosco:";
+    case "não tenho tempo":
+      return "Se o tempo sempre foi seu maior desafio, assista a esses depoimentos de mulheres que encontraram uma forma prática de se cuidar, mesmo na rotina corrida:";
+    case "não consigo fazer sozinha":
+      return "Se você sente dificuldade em treinar sozinha, confira como outras alunas superaram isso com nosso apoio e motivação:";
+    case "não vejo resultado":
+      return "Se você já tentou de tudo e não vê resultados, veja os relatos de quem finalmente conquistou mudanças reais:";
+    default:
+      return "Veja o que nossas alunas contam sobre vencer desafios e transformar sua rotina de treinos!";
+  }
+}
+
+export default function EnqueteDepoimento({ travamento, onContinue, onDoubt }: Props) {
   const [playing, setPlaying] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [progress, setProgress] = useState(0); // 0 a 1
-  const [startTime, setStartTime] = useState<number | null>(null);
-  const [elapsed, setElapsed] = useState(0); // segundos já assistidos
+  const [elapsed, setElapsed] = useState(0); // segundos já assistidos (estimados)
   const intervalRef = useRef<number | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const startTimestampRef = useRef<number | null>(null); // timestamp em ms usado para cálculo do elapsed
 
   const overlayStyle: React.CSSProperties = {
     position: "absolute",
@@ -35,40 +54,50 @@ export default function EnqueteDepoimento({ onDoubt }: Props) {
     return easeOutQuad(t);
   }
 
+  // Inicia o intervalo que atualiza elapsed/progress
   useEffect(() => {
-    if (!playing) {
+    if (playing) {
+      // define startTimestamp se ainda não existir (ou quando retomando)
+      startTimestampRef.current = Date.now() - elapsed * 1000;
+
+      // limpar qualquer intervalo anterior
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-      return;
-    }
 
-    setStartTime(Date.now() - elapsed * 1000);
-    intervalRef.current = window.setInterval(() => {
-      setElapsed(() => {
-        const newElapsed = Math.min(
-          ((Date.now() - (startTime ?? Date.now())) / 1000),
-          VIDEO_DURATION
-        );
+      intervalRef.current = window.setInterval(() => {
+        const start = startTimestampRef.current ?? Date.now();
+        const newElapsed = Math.min((Date.now() - start) / 1000, VIDEO_DURATION);
+        setElapsed(newElapsed);
         setProgress(recalcProgress(newElapsed));
         if (newElapsed >= VIDEO_DURATION) {
           setPlaying(false);
         }
-        return newElapsed;
-      });
-    }, 50);
+      }, 150);
 
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-    // eslint-disable-next-line
-  }, [playing, startTime]);
+      return () => {
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      };
+    } else {
+      // se pausou, limpa intervalo
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing]);
 
+  // Sincroniza play/pause com iframe via postMessage para YouTube API
   function handlePlayPause() {
     if (!videoReady) return;
     if (!playing) {
-      setStartTime(Date.now() - elapsed * 1000);
+      // iniciar
+      startTimestampRef.current = Date.now() - elapsed * 1000;
       setPlaying(true);
       if (iframeRef.current) {
         iframeRef.current.contentWindow?.postMessage(
@@ -77,6 +106,7 @@ export default function EnqueteDepoimento({ onDoubt }: Props) {
         );
       }
     } else {
+      // pausar
       setPlaying(false);
       if (iframeRef.current) {
         iframeRef.current.contentWindow?.postMessage(
@@ -87,6 +117,7 @@ export default function EnqueteDepoimento({ onDoubt }: Props) {
     }
   }
 
+  // Garante que ao atingir 100% o vídeo pare
   useEffect(() => {
     if (progress >= 1) {
       setPlaying(false);
@@ -109,6 +140,7 @@ export default function EnqueteDepoimento({ onDoubt }: Props) {
     }
   }
 
+  // Se o vídeo não estiver tocando, garantir que o iframe esteja em pause (quando pronto)
   useEffect(() => {
     if (!playing && progress < 1 && videoReady) {
       if (iframeRef.current) {
@@ -120,13 +152,15 @@ export default function EnqueteDepoimento({ onDoubt }: Props) {
     }
   }, [playing, videoReady, progress]);
 
-  // Ao clicar "Quero entrar" vai para o WhatsApp
+  // Ação ao clicar continuar - só dispara se onContinue existir (botão pode estar desabilitado)
   function handleContinue() {
-    // Recupera o número salvo no cadastro
-    const whats = localStorage.getItem("aluna_whatsapp") || "";
-    const numeroLimpo = whats.replace(/\D/g, "");
-    window.open(`https://wa.me/55${numeroLimpo}`, "_blank");
+    if (elapsed >= REQUIRED_SECONDS) {
+      if (onContinue) onContinue();
+    }
   }
+
+  const secondsRemaining = Math.max(0, REQUIRED_SECONDS - Math.floor(elapsed));
+  const continueDisabled = !videoReady || elapsed < REQUIRED_SECONDS;
 
   return (
     <div className="flex flex-col items-center w-full py-5">
@@ -144,9 +178,9 @@ export default function EnqueteDepoimento({ onDoubt }: Props) {
             Desafio 40+ Play
           </h1>
         </div>
-        {/* Conteúdo principal */}
-        <h2 className="text-2xl font-extrabold text-neutral-900 mb-4 text-center">
-          Veja o que mulheres reais dizem depois de treinar com a gente!
+        {/* Texto persuasivo conforme travamento */}
+        <h2 className="text-2xl font-extrabold text-indigo-900 mb-4 text-center">
+          {textoDepoimento(travamento)}
         </h2>
         <div className="flex justify-center mb-2">
           <div className="relative w-full max-w-md rounded-2xl overflow-hidden bg-black shadow-lg aspect-video"
@@ -217,10 +251,26 @@ export default function EnqueteDepoimento({ onDoubt }: Props) {
         <div className="flex flex-col gap-3 justify-center mt-6">
           <button
             onClick={handleContinue}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl text-base shadow-lg transition-all duration-300"
+            className={`w-full text-white font-bold px-6 py-3 rounded-xl text-base shadow-lg transition-all duration-300 ${
+              continueDisabled ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+            }`}
+            disabled={continueDisabled}
+            aria-disabled={continueDisabled}
+            title={continueDisabled ? `Assista ${REQUIRED_SECONDS} segundos do vídeo para liberar` : undefined}
           >
             Está decidido! Quero entrar no Desafio!
           </button>
+
+          {continueDisabled && (
+            <div className="text-center text-sm text-neutral-600 mt-1 select-none">
+              {videoReady ? (
+                <span>Assista mais {secondsRemaining}s para liberar o botão</span>
+              ) : (
+                <span>Carregando vídeo...</span>
+              )}
+            </div>
+          )}
+
           {onDoubt && (
             <button
               onClick={onDoubt}
