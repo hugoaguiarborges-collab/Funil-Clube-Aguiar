@@ -83,7 +83,7 @@ const Admin: React.FC = () => {
         <h2 className="text-xl font-bold mb-3">Área restrita</h2>
         <input
           type="password"
-          className="border px-3 py-2 rounded mb-2"
+          className="border px-4 py-2 rounded mb-2"
           placeholder="Digite a senha"
           value={senha}
           onChange={e => setSenha(e.target.value)}
