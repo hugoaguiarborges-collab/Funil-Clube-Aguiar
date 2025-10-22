@@ -29,7 +29,7 @@ export default function CadastroAluno({
 
   return (
     <div className="w-full max-w-md mx-auto bg-white/80 rounded-2xl p-6 shadow-lg">
-      <h2 className="text-xl font-bold mb-4">Quase lá! — cadastre-se</h2>
+      <h2 className="text-xl font-bold mb-4">Quase lá — cadastre-se</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <div>
           <label className="block text-sm font-medium mb-1">Nome</label>
